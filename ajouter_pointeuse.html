@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ZKTeco Manager - Ajouter une pointeuse
+    </title>
+
+    <link
+    rel="stylesheet"
+    href="/static/css/navigation.css"
+>
+
+
+    <style>
+
+        /* ==========================================
+           BASE
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            color: #263746;
+
+            background-color: #10263f;
+
+            background-image:
+                url(
+                    "/static/images/Versigent-Desktop-B-3840x2160.png"
+                );
+
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+
+        /* ==========================================
+           CONTENU PRINCIPAL
+        ========================================== */
+
+        .main {
+            min-height: 100vh;
+
+            padding:
+                34px
+                38px
+                60px
+                38px;
+        }
+
+        .page-container {
+            width: 100%;
+
+            max-width: 1180px;
+
+            margin:
+                0
+                auto;
+        }
+
+
+        /* ==========================================
+           ENTETE
+        ========================================== */
+
+        .header {
+            margin-bottom: 30px;
+
+            padding:
+                24px
+                27px;
+
+            background-color:
+                rgba(
+                    22,
+                    50,
+                    79,
+                    0.91
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.05
+                );
+
+            border-radius: 15px;
+
+            backdrop-filter:
+                blur(6px);
+
+            box-shadow:
+                0 10px 28px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.16
+                );
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+
+            color: #ffffff;
+
+            font-size: 32px;
+
+            line-height: 1.15;
+        }
+
+        .header p {
+            color: #e5edf4;
+
+            font-size: 15px;
+
+            line-height: 1.55;
+        }
+
+        .header-step {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-top: 14px;
+
+            padding:
+                6px
+                11px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.11
+                );
+
+            border-radius: 18px;
+
+            background-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.06
+                );
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.83
+                );
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.4px;
+
+            text-transform: uppercase;
+        }
+
+        .header-step-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background-color: #55b7ec;
+
+            box-shadow:
+                0 0 8px
+                rgba(
+                    85,
+                    183,
+                    236,
+                    0.60
+                );
+        }
+
+
+        /* ==========================================
+           ZONE CENTRALE
+        ========================================== */
+
+        .setup-container {
+            width:
+                min(
+                    100%,
+                    820px
+                );
+
+            margin:
+                0
+                auto;
+        }
+
+
+        /* ==========================================
+           CARTE FORMULAIRE
+        ========================================== */
+
+        .form-card {
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+                30px
+                32px
+                32px
+                32px;
+
+            background-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.95
+                );
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.50
+                );
+
+            border-radius: 20px;
+
+            backdrop-filter:
+                blur(8px);
+
+            box-shadow:
+                0 17px 42px
+                rgba(
+                    3,
+                    20,
+                    36,
+                    0.25
+                );
+
+            transition:
+                transform 0.22s ease,
+                box-shadow 0.22s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 21px 48px
+                rgba(
+                    3,
+                    20,
+                    36,
+                    0.29
+                );
+        }
+
+
+        /* ==========================================
+           ACCENT VERSIGENT
+        ========================================== */
+
+        .form-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 35px;
+            right: 35px;
+
+            height: 4px;
+
+            border-radius:
+                0
+                0
+                5px
+                5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #f28c18,
+                    #ffb34c
+                );
+
+            transition:
+                left 0.22s ease,
+                right 0.22s ease;
+        }
+
+        .form-card:hover::before {
+            left: 0;
+            right: 0;
+        }
+
+        .form-card::after {
+            content: "";
+
+            position: absolute;
+
+            top: -75px;
+            right: -75px;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(
+                    52,
+                    152,
+                    219,
+                    0.06
+                );
+
+            pointer-events: none;
+        }
+
+
+        /* ==========================================
+           IDENTITE FORMULAIRE
+        ========================================== */
+
+        .form-heading {
+            position: relative;
+
+            z-index: 1;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 17px;
+
+            margin-bottom: 28px;
+
+            padding-bottom: 21px;
+
+            border-bottom:
+                1px solid #e8edf1;
+        }
+
+        .terminal-icon {
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex:
+                0
+                0
+                auto;
+
+            width: 60px;
+            height: 60px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #56b8ee,
+                    #2388c5
+                );
+
+            box-shadow:
+                0 9px 23px
+                rgba(
+                    35,
+                    136,
+                    197,
+                    0.30
+                );
+        }
+
+        .terminal-symbol {
+            position: relative;
+
+            width: 28px;
+            height: 33px;
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.96
+                );
+
+            border-radius: 5px;
+        }
+
+        .terminal-symbol::before {
+            content: "";
+
+            position: absolute;
+
+            top: 5px;
+            left: 5px;
+            right: 5px;
+
+            height: 9px;
+
+            border-radius: 2px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.83
+                );
+        }
+
+        .terminal-symbol::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 5px;
+            left: 6px;
+
+            width: 4px;
+            height: 4px;
+
+            border-radius: 50%;
+
+            background: #ffffff;
+
+            box-shadow:
+                7px 0 0
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.73
+                ),
+                14px 0 0
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.50
+                );
+        }
+
+        .form-heading-content {
+            min-width: 0;
+        }
+
+        .form-heading-title {
+            margin-bottom: 5px;
+
+            color: #17334a;
+
+            font-size: 20px;
+
+            font-weight: 700;
+        }
+
+        .form-heading-kicker {
+            color: #82909c;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.15px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* ==========================================
+           FORMULAIRE
+        ========================================== */
+
+        .form-group {
+            position: relative;
+
+            z-index: 1;
+
+            margin-bottom: 23px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #314759;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.25px;
+        }
+
+        .required {
+            color: #df3d48;
+        }
+
+        input {
+            width: 100%;
+
+            min-height: 47px;
+
+            padding:
+                11px
+                14px;
+
+            border:
+                1px solid
+                #d2dce4;
+
+            border-radius: 10px;
+
+            background-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.97
+                );
+
+            color: #263c4d;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition:
+                border-color 0.18s ease,
+                box-shadow 0.18s ease;
+        }
+
+        input:hover {
+            border-color: #b9c9d5;
+        }
+
+        input:focus {
+            border-color: #3498db;
+
+            background-color: #ffffff;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    52,
+                    152,
+                    219,
+                    0.10
+                );
+        }
+
+        .help {
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 7px;
+
+            color: #81909b;
+
+            font-size: 11px;
+
+            line-height: 1.45;
+        }
+
+        .help-dot {
+            flex:
+                0
+                0
+                auto;
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background-color: #7fb8d9;
+        }
+
+
+        /* ==========================================
+           RESEAU
+        ========================================== */
+
+        .network-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(
+                    0,
+                    1fr
+                )
+                180px;
+
+            gap: 16px;
+        }
+
+
+        /* ==========================================
+           BOUTONS
+        ========================================== */
+
+        .actions {
+            position: relative;
+
+            z-index: 1;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            gap: 12px;
+
+            margin-top: 30px;
+
+            padding-top: 22px;
+
+            border-top:
+                1px solid #e8edf1;
+        }
+
+        .btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            min-height: 45px;
+
+            padding:
+                11px
+                19px;
+
+            border: 0;
+
+            border-radius: 9px;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.18s ease,
+                box-shadow 0.18s ease,
+                background-color 0.18s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.62;
+
+            cursor: wait;
+
+            transform: none;
+        }
+
+        .btn-secondary {
+            border:
+                1px solid #d8e0e6;
+
+            background-color: #f1f4f6;
+
+            color: #405363;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e5ebef;
+        }
+
+        .btn-primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    #45aae4,
+                    #2589c4
+                );
+
+            color: #ffffff;
+
+            box-shadow:
+                0 7px 17px
+                rgba(
+                    37,
+                    137,
+                    196,
+                    0.26
+                );
+        }
+
+        .btn-success {
+            background:
+                linear-gradient(
+                    135deg,
+                    #39ad6a,
+                    #21884c
+                );
+
+            color: #ffffff;
+
+            box-shadow:
+                0 7px 17px
+                rgba(
+                    33,
+                    136,
+                    76,
+                    0.25
+                );
+        }
+
+        .button-icon {
+            font-size: 17px;
+
+            line-height: 1;
+        }
+
+
+        /* ==========================================
+           RESULTAT
+        ========================================== */
+
+        .result-card {
+            width: 100%;
+
+            margin-top: 24px;
+
+            padding:
+                22px
+                24px;
+
+            border-radius: 16px;
+
+            backdrop-filter:
+                blur(7px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(
+                    3,
+                    20,
+                    36,
+                    0.17
+                );
+        }
+
+        .success-box {
+            border:
+                1px solid
+                rgba(
+                    40,
+                    167,
+                    69,
+                    0.20
+                );
+
+            border-left:
+                5px solid #28a745;
+
+            background-color:
+                rgba(
+                    240,
+                    251,
+                    244,
+                    0.96
+                );
+
+            color: #155724;
+        }
+
+        .error-box {
+            border:
+                1px solid
+                rgba(
+                    220,
+                    53,
+                    69,
+                    0.18
+                );
+
+            border-left:
+                5px solid #dc3545;
+
+            background-color:
+                rgba(
+                    255,
+                    241,
+                    242,
+                    0.96
+                );
+
+            color: #721c24;
+        }
+
+        .result-heading {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 16px;
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+        .result-icon {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(
+                    40,
+                    167,
+                    69,
+                    0.12
+                );
+
+            color: #218838;
+
+            font-size: 17px;
+        }
+
+        .test-results-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap: 10px;
+        }
+
+        .test-detail {
+            padding:
+                11px
+                12px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.70
+                );
+
+            color: #587063;
+
+            font-size: 12px;
+        }
+
+        .test-detail span {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #789084;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.75px;
+
+            text-transform: uppercase;
+        }
+
+        .test-detail strong {
+            color: #174b2b;
+
+            font-size: 13px;
+        }
+
+        .save-actions {
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin-top: 18px;
+
+            padding-top: 16px;
+
+            border-top:
+                1px solid
+                rgba(
+                    40,
+                    167,
+                    69,
+                    0.13
+                );
+        }
+
+
+        /* ==========================================
+           VERIFICATIONS
+        ========================================== */
+
+        .test-info-card {
+            margin-top: 24px;
+
+            padding:
+                22px
+                24px;
+
+            border:
+                1px solid
+                rgba(
+                    52,
+                    152,
+                    219,
+                    0.13
+                );
+
+            border-radius: 16px;
+
+            background-color:
+                rgba(
+                    243,
+                    250,
+                    254,
+                    0.95
+                );
+
+            backdrop-filter:
+                blur(7px);
+
+            box-shadow:
+                0 11px 28px
+                rgba(
+                    3,
+                    20,
+                    36,
+                    0.15
+                );
+        }
+
+        .info-heading {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            margin-bottom: 19px;
+        }
+
+        .info-icon {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 37px;
+            height: 37px;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #57b7e9,
+                    #308fc4
+                );
+
+            color: #ffffff;
+
+            font-size: 17px;
+
+            font-weight: 700;
+        }
+
+        .info-title {
+            color: #245a79;
+
+            font-size: 15px;
+
+            font-weight: 700;
+        }
+
+        .info-caption {
+            margin-top: 3px;
+
+            color: #7893a3;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            letter-spacing: 0.7px;
+
+            text-transform: uppercase;
+        }
+
+        .checks-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    5,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap: 9px;
+        }
+
+        .check-item {
+            padding:
+                13px
+                8px;
+
+            border:
+                1px solid
+                rgba(
+                    52,
+                    152,
+                    219,
+                    0.10
+                );
+
+            border-radius: 10px;
+
+            background-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.72
+                );
+
+            color: #42718c;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-align: center;
+        }
+
+        .check-number {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 25px;
+            height: 25px;
+
+            margin:
+                0
+                auto
+                8px
+                auto;
+
+            border-radius: 8px;
+
+            background:
+                rgba(
+                    52,
+                    152,
+                    219,
+                    0.10
+                );
+
+            color: #2588c1;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* ==========================================
+           INFORMATION
+        ========================================== */
+
+        .warning-box {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 13px;
+
+            margin-top: 18px;
+
+            padding:
+                16px
+                18px;
+
+            border:
+                1px solid
+                rgba(
+                    242,
+                    140,
+                    24,
+                    0.17
+                );
+
+            border-left:
+                4px solid #f28c18;
+
+            border-radius: 12px;
+
+            background-color:
+                rgba(
+                    255,
+                    249,
+                    235,
+                    0.95
+                );
+
+            color: #73551e;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+            backdrop-filter:
+                blur(6px);
+        }
+
+        .warning-icon {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex:
+                0
+                0
+                auto;
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(
+                    242,
+                    140,
+                    24,
+                    0.13
+                );
+
+            color: #d57912;
+
+            font-size: 17px;
+
+            font-weight: 700;
+        }
+
+        .warning-title {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #714c10;
+
+            font-weight: 700;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 800px) {
+
+            .network-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checks-grid {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(
+                            0,
+                            1fr
+                        )
+                    );
+            }
+
+            .test-results-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 620px) {
+
+            .main {
+                padding:
+                    20px
+                    15px
+                    40px
+                    15px;
+            }
+
+            .header {
+                padding:
+                    21px
+                    20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .form-card {
+                padding:
+                    25px
+                    20px
+                    23px
+                    20px;
+            }
+
+            .form-heading {
+                align-items: flex-start;
+            }
+
+            .terminal-icon {
+                width: 51px;
+                height: 51px;
+
+                border-radius: 15px;
+            }
+
+            .terminal-symbol {
+                transform: scale(0.88);
+            }
+
+            .actions {
+                align-items: stretch;
+
+                flex-direction: column-reverse;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .save-actions .btn {
+                width: 100%;
+            }
+
+            .checks-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         MENU PARTAGE
+    ========================================== -->
+
+    {% include "sidebar.html" %}
+
+
+    <main class="main">
+
+
+        <div class="page-container">
+
+
+            <!-- ======================================
+                 ENTETE
+            ======================================= -->
+
+            <div class="header">
+
+
+                <h1>
+                    Ajouter une pointeuse
+                </h1>
+
+
+                <p>
+                    Configurez et vérifiez un nouveau terminal
+                    ZKTeco avant son ajout au portail
+                </p>
+
+
+                <div class="header-step">
+
+                    <span class="header-step-dot"></span>
+
+                    Nouvelle configuration
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ======================================
+                 CONTENU CENTRAL
+            ======================================= -->
+
+            <div class="setup-container">
+
+
+                <!-- ==================================
+                     FORMULAIRE
+                =================================== -->
+
+                <div class="form-card">
+
+
+                    <div class="form-heading">
+
+
+                        <div
+                            class="terminal-icon"
+                            aria-hidden="true"
+                        >
+
+                            <div class="terminal-symbol"></div>
+
+                        </div>
+
+
+                        <div class="form-heading-content">
+
+
+                            <div class="form-heading-title">
+                                Nouveau terminal ZKTeco
+                            </div>
+
+
+                            <div class="form-heading-kicker">
+                                Configuration réseau
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- ==============================
+                         NOM
+                    =============================== -->
+
+                    <div class="form-group">
+
+
+                        <label for="nom">
+
+                            Nom de la pointeuse
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="nom"
+                            value="{{ form_data.nom }}"
+                            placeholder="Exemple : ZKTeco Bureau 2"
+                            autocomplete="off"
+                        >
+
+
+                        <span class="help">
+
+                            <span class="help-dot"></span>
+
+                            Nom utilisé pour identifier rapidement
+                            la pointeuse dans le portail.
+
+                        </span>
+
+
+                    </div>
+
+
+                    <!-- ==============================
+                         RESEAU
+                    =============================== -->
+
+                    <div class="network-grid">
+
+
+                        <!-- IP -->
+
+                        <div class="form-group">
+
+
+                            <label for="ip">
+
+                                Adresse IP
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="ip"
+                                value="{{ form_data.ip }}"
+                                placeholder="Exemple : 10.227.198.16"
+                                autocomplete="off"
+                            >
+
+
+                            <span class="help">
+
+                                <span class="help-dot"></span>
+
+                                Réseau autorisé : 10.227.198.x
+
+                            </span>
+
+
+                        </div>
+
+
+                        <!-- PORT -->
+
+                        <div class="form-group">
+
+
+                            <label for="port">
+
+                                Port
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="number"
+                                id="port"
+                                value="{{ form_data.port }}"
+                                min="1"
+                                max="65535"
+                            >
+
+
+                            <span class="help">
+
+                                <span class="help-dot"></span>
+
+                                Standard : 4370
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- ==============================
+                         ACTIONS
+                    =============================== -->
+
+                    <div class="actions">
+
+
+                        <button
+                            class="btn btn-secondary"
+                            id="btn-annuler"
+                            type="button"
+                        >
+                            Annuler
+                        </button>
+
+
+                        <button
+                            class="btn btn-primary"
+                            id="btn-tester"
+                            type="button"
+                        >
+
+                            <span
+                                class="button-icon"
+                                aria-hidden="true"
+                            >
+                                ↻
+                            </span>
+
+                            <span>
+                                Tester la connexion
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==================================
+                     RESULTAT DU TEST
+                =================================== -->
+
+                {% if resultat_test %}
+
+
+                    {% if resultat_test.success %}
+
+
+                        <div class="result-card success-box">
+
+
+                            <div class="result-heading">
+
+
+                                <div
+                                    class="result-icon"
+                                    aria-hidden="true"
+                                >
+                                    ✓
+                                </div>
+
+
+                                <span>
+                                    Connexion réussie
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="test-results-grid">
+
+
+                                <div class="test-detail">
+
+                                    <span>
+                                        Adresse IP
+                                    </span>
+
+                                    <strong>
+                                        {{ resultat_test.ip }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="test-detail">
+
+                                    <span>
+                                        Port
+                                    </span>
+
+                                    <strong>
+                                        {{ resultat_test.port }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="test-detail">
+
+                                    <span>
+                                        Ping réseau
+                                    </span>
+
+                                    <strong>
+
+                                        {% if resultat_test.ping %}
+
+                                            OK
+
+                                        {% else %}
+
+                                            Non disponible
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="test-detail">
+
+                                    <span>
+                                        Firmware
+                                    </span>
+
+                                    <strong>
+                                        {{ resultat_test.firmware }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="test-detail">
+
+                                    <span>
+                                        Heure de la pointeuse
+                                    </span>
+
+                                    <strong>
+                                        {{ resultat_test.heure }}
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="save-actions">
+
+
+                                <button
+                                    class="btn btn-success"
+                                    id="btn-enregistrer"
+                                    type="button"
+                                >
+
+                                    <span
+                                        class="button-icon"
+                                        aria-hidden="true"
+                                    >
+                                        ✓
+                                    </span>
+
+                                    <span>
+                                        Enregistrer cette pointeuse
+                                    </span>
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <div class="result-card error-box">
+
+
+                            <div class="result-heading">
+
+                                <strong>
+                                    Connexion impossible
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+                                {{ resultat_test.erreur }}
+                            </div>
+
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                {% endif %}
+
+
+                <!-- ==================================
+                     VERIFICATION DU TERMINAL
+                =================================== -->
+
+                <div class="test-info-card">
+
+
+                    <div class="info-heading">
+
+
+                        <div
+                            class="info-icon"
+                            aria-hidden="true"
+                        >
+                            ✓
+                        </div>
+
+
+                        <div>
+
+
+                            <div class="info-title">
+                                Vérification du terminal
+                            </div>
+
+
+                            <div class="info-caption">
+                                Contrôles avant enregistrement
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="checks-grid">
+
+
+                        <div class="check-item">
+
+                            <div class="check-number">
+                                01
+                            </div>
+
+                            Adresse IP
+
+                        </div>
+
+
+                        <div class="check-item">
+
+                            <div class="check-number">
+                                02
+                            </div>
+
+                            Ping réseau
+
+                        </div>
+
+
+                        <div class="check-item">
+
+                            <div class="check-number">
+                                03
+                            </div>
+
+                            Port ZKTeco
+
+                        </div>
+
+
+                        <div class="check-item">
+
+                            <div class="check-number">
+                                04
+                            </div>
+
+                            Firmware
+
+                        </div>
+
+
+                        <div class="check-item">
+
+                            <div class="check-number">
+                                05
+                            </div>
+
+                            Heure terminal
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==================================
+                     INFORMATION
+                =================================== -->
+
+                <div class="warning-box">
+
+
+                    <div
+                        class="warning-icon"
+                        aria-hidden="true"
+                    >
+                        i
+                    </div>
+
+
+                    <div>
+
+
+                        <span class="warning-title">
+                            Enregistrement sécurisé
+                        </span>
+
+
+                        Après un test réussi, le bouton vert permet
+                        d'enregistrer la pointeuse dans ZKTeco Manager.
+                        La nouvelle pointeuse sera enregistrée avec
+                        le statut <strong>ACTIVE</strong>.
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                const cancelButton =
+                    document.getElementById(
+                        "btn-annuler"
+                    );
+
+
+                const testButton =
+                    document.getElementById(
+                        "btn-tester"
+                    );
+
+
+                const saveButton =
+                    document.getElementById(
+                        "btn-enregistrer"
+                    );
+
+
+                /* ==================================
+                   ANNULER
+                ================================== */
+
+                if (cancelButton) {
+
+                    cancelButton.addEventListener(
+                        "click",
+                        function () {
+
+                            window.location.href =
+                                "/pointeuses";
+
+                        }
+                    );
+
+                }
+
+
+                /* ==================================
+                   TESTER LA CONNEXION
+                ================================== */
+
+                if (testButton) {
+
+                    testButton.addEventListener(
+                        "click",
+                        async function () {
+
+
+                            const nom =
+                                document
+                                    .getElementById(
+                                        "nom"
+                                    )
+                                    .value
+                                    .trim();
+
+
+                            const ip =
+                                document
+                                    .getElementById(
+                                        "ip"
+                                    )
+                                    .value
+                                    .trim();
+
+
+                            const port =
+                                document
+                                    .getElementById(
+                                        "port"
+                                    )
+                                    .value
+                                    .trim();
+
+
+                            /* ======================
+                               VALIDATION NOM
+                            ======================= */
+
+                            if (nom === "") {
+
+                                alert(
+                                    "Veuillez saisir le nom "
+                                    + "de la pointeuse."
+                                );
+
+                                return;
+
+                            }
+
+
+                            /* ======================
+                               VALIDATION IP
+                            ======================= */
+
+                            if (ip === "") {
+
+                                alert(
+                                    "Veuillez saisir l'adresse IP."
+                                );
+
+                                return;
+
+                            }
+
+
+                            /* ======================
+                               VALIDATION PORT
+                            ======================= */
+
+                            if (port === "") {
+
+                                alert(
+                                    "Veuillez saisir le port."
+                                );
+
+                                return;
+
+                            }
+
+
+                            /* ======================
+                               RESEAU
+                            ======================= */
+
+                            if (
+                                !ip.startsWith(
+                                    "10.227.198."
+                                )
+                            ) {
+
+                                alert(
+                                    "L'adresse IP doit appartenir "
+                                    + "au réseau 10.227.198.x."
+                                );
+
+                                return;
+
+                            }
+
+
+                            /* ======================
+                               TEST
+                            ======================= */
+
+                            testButton.disabled =
+                                true;
+
+
+                            testButton.innerHTML =
+                                '<span '
+                                + 'class="button-icon">'
+                                + '↻'
+                                + '</span>'
+                                + '<span>'
+                                + 'Test en cours...'
+                                + '</span>';
+
+
+                            try {
+
+
+                                const donnees =
+                                    new URLSearchParams();
+
+
+                                donnees.append(
+                                    "nom",
+                                    nom
+                                );
+
+
+                                donnees.append(
+                                    "ip",
+                                    ip
+                                );
+
+
+                                donnees.append(
+                                    "port",
+                                    port
+                                );
+
+
+                                const reponse =
+                                    await fetch(
+                                        "/pointeuses/tester",
+                                        {
+                                            method: "POST",
+
+                                            headers: {
+                                                "Content-Type":
+                                                    "application/x-www-form-urlencoded"
+                                            },
+
+                                            body:
+                                                donnees.toString()
+                                        }
+                                    );
+
+
+                                if (!reponse.ok) {
+
+                                    throw new Error(
+                                        "Erreur HTTP "
+                                        + reponse.status
+                                    );
+
+                                }
+
+
+                                const html =
+                                    await reponse.text();
+
+
+                                document.open();
+
+
+                                document.write(
+                                    html
+                                );
+
+
+                                document.close();
+
+
+                            } catch (erreur) {
+
+
+                                alert(
+                                    "Impossible de tester "
+                                    + "la connexion : "
+                                    + erreur.message
+                                );
+
+
+                                testButton.disabled =
+                                    false;
+
+
+                                testButton.innerHTML =
+                                    '<span '
+                                    + 'class="button-icon">'
+                                    + '↻'
+                                    + '</span>'
+                                    + '<span>'
+                                    + 'Tester la connexion'
+                                    + '</span>';
+
+
+                            }
+
+
+                        }
+                    );
+
+                }
+
+
+                /* ==================================
+                   ENREGISTRER
+                ================================== */
+
+                if (saveButton) {
+
+                    saveButton.addEventListener(
+                        "click",
+                        async function () {
+
+
+                            const nom =
+                                document
+                                    .getElementById(
+                                        "nom"
+                                    )
+                                    .value
+                                    .trim();
+
+
+                            const ip =
+                                document
+                                    .getElementById(
+                                        "ip"
+                                    )
+                                    .value
+                                    .trim();
+
+
+                            const port =
+                                document
+                                    .getElementById(
+                                        "port"
+                                    )
+                                    .value
+                                    .trim();
+
+
+                            const confirmation =
+                                window.confirm(
+                                    "Confirmer l'enregistrement de "
+                                    + nom
+                                    + " ("
+                                    + ip
+                                    + ":"
+                                    + port
+                                    + ") ?"
+                                );
+
+
+                            if (!confirmation) {
+
+                                return;
+
+                            }
+
+
+                            saveButton.disabled =
+                                true;
+
+
+                            saveButton.innerHTML =
+                                "<span>Enregistrement...</span>";
+
+
+                            try {
+
+
+                                const donnees =
+                                    new URLSearchParams();
+
+
+                                donnees.append(
+                                    "nom",
+                                    nom
+                                );
+
+
+                                donnees.append(
+                                    "ip",
+                                    ip
+                                );
+
+
+                                donnees.append(
+                                    "port",
+                                    port
+                                );
+
+
+                                const reponse =
+                                    await fetch(
+                                        "/pointeuses/enregistrer",
+                                        {
+                                            method: "POST",
+
+                                            headers: {
+                                                "Content-Type":
+                                                    "application/x-www-form-urlencoded"
+                                            },
+
+                                            body:
+                                                donnees.toString()
+                                        }
+                                    );
+
+
+                                if (!reponse.ok) {
+
+                                    throw new Error(
+                                        "Erreur HTTP "
+                                        + reponse.status
+                                    );
+
+                                }
+
+
+                                const resultat =
+                                    await reponse.json();
+
+
+                                if (
+                                    resultat.success
+                                ) {
+
+
+                                    alert(
+                                        "Pointeuse enregistrée "
+                                        + "avec succès."
+                                    );
+
+
+                                    window.location.href =
+                                        "/pointeuses";
+
+
+                                    return;
+
+                                }
+
+
+                                alert(
+                                    "Enregistrement impossible : "
+                                    + (
+                                        resultat.erreur
+                                        || "Erreur inconnue."
+                                    )
+                                );
+
+
+                                saveButton.disabled =
+                                    false;
+
+
+                                saveButton.innerHTML =
+                                    '<span '
+                                    + 'class="button-icon">'
+                                    + '✓'
+                                    + '</span>'
+                                    + '<span>'
+                                    + 'Enregistrer cette pointeuse'
+                                    + '</span>';
+
+
+                            } catch (erreur) {
+
+
+                                alert(
+                                    "Erreur pendant "
+                                    + "l'enregistrement : "
+                                    + erreur.message
+                                );
+
+
+                                saveButton.disabled =
+                                    false;
+
+
+                                saveButton.innerHTML =
+                                    '<span '
+                                    + 'class="button-icon">'
+                                    + '✓'
+                                    + '</span>'
+                                    + '<span>'
+                                    + 'Enregistrer cette pointeuse'
+                                    + '</span>';
+
+
+                            }
+
+
+                        }
+                    );
+
+                }
+
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

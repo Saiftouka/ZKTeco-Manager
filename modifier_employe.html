@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZKTeco Manager - Modifier un employé</title>
+    <link rel="stylesheet" href="/static/css/navigation.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #253747;
+            background-color: #10263f;
+            background-image: url("/static/images/Versigent-Desktop-B-3840x2160.png");
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .main {
+            min-height: 100vh;
+            padding: 34px 38px 60px;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .device-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 22px;
+            padding: 22px 25px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.50);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 15px 36px rgba(3, 20, 36, 0.23);
+        }
+
+        .device-card::before,
+        .profile-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 30px;
+            right: 30px;
+            height: 4px;
+            background: linear-gradient(90deg, #f28c18, #ffb34c);
+            border-radius: 0 0 5px 5px;
+        }
+
+        .device-identity {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .device-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            flex: 0 0 auto;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #55b7ec, #2588c3);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .device-name {
+            margin-bottom: 5px;
+            color: #163047;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .device-address {
+            color: #71808e;
+            font-size: 12px;
+        }
+
+        .device-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .device-status.active {
+            background: #ddf4e5;
+            color: #116b35;
+        }
+
+        .device-status.inactive {
+            background: #edf0f2;
+            color: #626b73;
+        }
+
+        .device-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .profile-card {
+            position: relative;
+            padding: 29px 31px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.50);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 15px 36px rgba(3, 20, 36, 0.23);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e8edf1;
+        }
+
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 53px;
+            height: 53px;
+            flex: 0 0 auto;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #203d59, #17334c);
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .profile-title {
+            margin-bottom: 4px;
+            color: #17334a;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .profile-subtitle {
+            color: #82909c;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px 18px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #344c5e;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 12px;
+            border: 1px solid #d2dce4;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #263b4c;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.10);
+        }
+
+        .field-help {
+            display: block;
+            margin-top: 6px;
+            color: #8b98a2;
+            font-size: 9px;
+        }
+
+        .role-info {
+            margin-top: 10px;
+            padding: 11px 13px;
+            border: 1px solid #e1e8ec;
+            border-radius: 9px;
+            background: #f8fafb;
+            color: #667b89;
+            font-size: 10px;
+        }
+
+        .message-box {
+            display: none;
+            margin-top: 22px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .message-box.success {
+            display: block;
+            border-left: 4px solid #27ae60;
+            background: #effaf4;
+            color: #17663a;
+        }
+
+        .message-box.error {
+            display: block;
+            border-left: 4px solid #dc3545;
+            background: #fff1f2;
+            color: #9c2e38;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 27px;
+            padding-top: 20px;
+            border-top: 1px solid #e8edf1;
+        }
+
+        .actions-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button {
+            min-height: 43px;
+            padding: 10px 18px;
+            border: 0;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .button:disabled {
+            opacity: 0.60;
+            cursor: wait;
+        }
+
+        .button-back {
+            border: 1px solid #d9e0e5;
+            background: #eef1f3;
+            color: #405363;
+        }
+
+        .button-reset {
+            border: 1px solid #d9e0e5;
+            background: #ffffff;
+            color: #526876;
+        }
+
+        .button-save {
+            min-width: 190px;
+            background: linear-gradient(135deg, #45aae4, #2589c4);
+            color: #ffffff;
+        }
+
+        .security-box {
+            margin-top: 22px;
+            padding: 14px 16px;
+            border: 1px solid rgba(242, 140, 24, 0.18);
+            border-left: 4px solid #f28c18;
+            border-radius: 10px;
+            background: #fff9ed;
+            color: #74551c;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+            .main {
+                padding: 20px 14px 40px;
+            }
+
+            .device-card,
+            .actions,
+            .actions-right {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .profile-card {
+                padding: 24px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .actions-right,
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include "sidebar.html" %}
+
+    <main class="main">
+        <div class="content-wrapper">
+
+            <section class="device-card">
+                <div class="device-identity">
+                    <div class="device-icon" aria-hidden="true">ZK</div>
+                    <div>
+                        <div class="device-name">{{ pointeuse.nom }}</div>
+                        <div class="device-address">
+                            {{ pointeuse.ip }} &bull; Port {{ pointeuse.port }}
+                        </div>
+                    </div>
+                </div>
+
+                {% if pointeuse.active %}
+                    <div class="device-status active">
+                        <span class="device-status-dot"></span>
+                        Active
+                    </div>
+                {% else %}
+                    <div class="device-status inactive">
+                        <span class="device-status-dot"></span>
+                        Inactive
+                    </div>
+                {% endif %}
+            </section>
+
+            <section class="profile-card">
+
+                <div class="profile-header">
+                    <div class="profile-icon" aria-hidden="true">U</div>
+                    <div>
+                        <div class="profile-title">Profil de l'employé</div>
+                        <div class="profile-subtitle">
+                            Consultation et modification des informations enregistrées dans la pointeuse
+                        </div>
+                    </div>
+                </div>
+
+                <form
+                    id="employeeForm"
+                    method="post"
+                    action="/employes/{{ utilisateur.uid }}/modifier"
+                >
+                    <input
+                        type="hidden"
+                        name="pointeuse_id"
+                        value="{{ pointeuse.id }}"
+                    >
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="matricule">
+                                Matricule <span class="required">*</span>
+                            </label>
+                            <input
+                                id="matricule"
+                                name="matricule"
+                                type="text"
+                                value="{{ utilisateur.matricule or '' }}"
+                                required
+                                autocomplete="off"
+                            >
+                            <span class="field-help">
+                                Le matricule doit être unique dans cette pointeuse.
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="badge">
+                                Numéro de badge / carte <span class="required">*</span>
+                            </label>
+                            <input
+                                id="badge"
+                                name="badge"
+                                type="text"
+                                inputmode="numeric"
+                                value="{{ utilisateur.badge or '' }}"
+                                required
+                                autocomplete="off"
+                            >
+                            <span class="field-help">
+                                Un même badge ne peut pas être attribué à deux employés.
+                            </span>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="nom">
+                                Nom &amp; Prénom <span class="required">*</span>
+                            </label>
+                            <input
+                                id="nom"
+                                name="nom"
+                                type="text"
+                                value="{{ utilisateur.nom or '' }}"
+                                required
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="role">
+                                Statut utilisateur <span class="required">*</span>
+                            </label>
+                            <select id="role" name="role" required>
+                                <option
+                                    value="Utilisateur normal"
+                                    {% if utilisateur.role != "Admin" %}selected{% endif %}
+                                >
+                                    Utilisateur normal
+                                </option>
+                                <option
+                                    value="Admin"
+                                    {% if utilisateur.role == "Admin" %}selected{% endif %}
+                                >
+                                    Admin
+                                </option>
+                            </select>
+                            <div class="role-info" id="roleInfo"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="message-box" id="messageBox"></div>
+
+                    <div class="actions">
+                        <button
+                            type="button"
+                            class="button button-back"
+                            id="backButton"
+                        >
+                            ← Retour aux employés
+                        </button>
+
+                        <div class="actions-right">
+                            <button
+                                type="button"
+                                class="button button-reset"
+                                id="resetButton"
+                            >
+                                Annuler les changements
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="button button-save"
+                                id="saveButton"
+                            >
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="security-box">
+                    <strong>Important :</strong>
+                    cette opération modifie uniquement le profil utilisateur enregistré dans la pointeuse sélectionnée.
+                    <br>
+                    Aucun pointage, historique SQLite ou backup n'est supprimé par cette page.
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("employeeForm");
+            const matricule = document.getElementById("matricule");
+            const nom = document.getElementById("nom");
+            const badge = document.getElementById("badge");
+            const role = document.getElementById("role");
+            const roleInfo = document.getElementById("roleInfo");
+            const messageBox = document.getElementById("messageBox");
+            const saveButton = document.getElementById("saveButton");
+            const resetButton = document.getElementById("resetButton");
+            const backButton = document.getElementById("backButton");
+
+            if (!form || !saveButton) {
+                console.error("employeeForm ou saveButton introuvable");
+                return;
+            }
+
+            const original = {
+                matricule: matricule.value,
+                nom: nom.value,
+                badge: badge.value,
+                role: role.value
+            };
+
+            function updateRoleInfo() {
+                if (role.value === "Admin") {
+                    roleInfo.innerHTML = "<strong>Admin :</strong> profil administrateur de la pointeuse.";
+                } else {
+                    roleInfo.innerHTML = "<strong>Utilisateur normal :</strong> profil standard de la pointeuse.";
+                }
+            }
+
+            function showMessage(type, text) {
+                messageBox.className = "message-box " + type;
+                messageBox.textContent = text;
+            }
+
+            function clearMessage() {
+                messageBox.className = "message-box";
+                messageBox.textContent = "";
+            }
+
+            updateRoleInfo();
+            role.addEventListener("change", updateRoleInfo);
+
+            badge.addEventListener("input", function () {
+                badge.value = badge.value.replace(/[^0-9]/g, "");
+            });
+
+            backButton.addEventListener("click", function () {
+                window.location.href = "/employes?pointeuse_id=" + encodeURIComponent("{{ pointeuse.id }}");
+            });
+
+            resetButton.addEventListener("click", function () {
+                matricule.value = original.matricule;
+                nom.value = original.nom;
+                badge.value = original.badge;
+                role.value = original.role;
+                updateRoleInfo();
+                clearMessage();
+            });
+
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault();
+                clearMessage();
+
+                if (!matricule.value.trim()) {
+                    showMessage("error", "Le matricule est obligatoire.");
+                    matricule.focus();
+                    return;
+                }
+
+                if (!nom.value.trim()) {
+                    showMessage("error", "Le nom et prénom sont obligatoires.");
+                    nom.focus();
+                    return;
+                }
+
+                if (!badge.value.trim()) {
+                    showMessage("error", "Le numéro de badge est obligatoire.");
+                    badge.focus();
+                    return;
+                }
+
+                if (!/^[0-9]+$/.test(badge.value.trim())) {
+                    showMessage("error", "Le numéro de badge doit contenir uniquement des chiffres.");
+                    badge.focus();
+                    return;
+                }
+
+                const oldText = saveButton.textContent;
+                saveButton.disabled = true;
+                resetButton.disabled = true;
+                saveButton.textContent = "Enregistrement en cours...";
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: "POST",
+                        body: new FormData(form)
+                    });
+
+                    let result;
+                    try {
+                        result = await response.json();
+                    } catch (error) {
+                        throw new Error("Le serveur a retourné une réponse invalide.");
+                    }
+
+                    if (!response.ok || result.success !== true) {
+                        throw new Error(result.erreur || "Impossible d'enregistrer les modifications.");
+                    }
+
+                    showMessage("success", "Les modifications ont été enregistrées avec succès.");
+                    saveButton.textContent = "Modifications enregistrées";
+
+                    window.setTimeout(function () {
+                        window.location.href = "/employes?pointeuse_id=" + encodeURIComponent("{{ pointeuse.id }}");
+                    }, 800);
+
+                } catch (error) {
+                    showMessage("error", error.message || "Erreur pendant l'enregistrement.");
+                    saveButton.disabled = false;
+                    resetButton.disabled = false;
+                    saveButton.textContent = oldText;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

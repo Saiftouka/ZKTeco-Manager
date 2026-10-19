@@ -1,0 +1,178 @@
+
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        ZKTeco Manager
+    </div>
+
+    <nav class="sidebar-navigation">
+
+        <button
+            type="button"
+            class="menu-button {% if active_page == 'accueil' %}active{% endif %}"
+            onclick="window.location.href='/'"
+        >
+            Accueil
+        </button>
+
+        <button
+            type="button"
+            class="menu-button {% if active_page == 'dashboard' %}active{% endif %}"
+            onclick="window.location.href='/dashboard'"
+        >
+            Dashboard
+        </button>
+
+        <button
+            type="button"
+            class="menu-button {% if active_page == 'pointeuses' %}active{% endif %}"
+            onclick="window.location.href='/pointeuses'"
+        >
+            Pointeuses
+        </button>
+
+        <button
+            type="button"
+            class="menu-button {% if active_page == 'pointages' %}active{% endif %}"
+            onclick="window.location.href='/pointages'"
+        >
+            Pointages
+        </button>
+
+        <button
+            type="button"
+            class="menu-button {% if active_page == 'parametres' %}active{% endif %}"
+            onclick="window.location.href='/parametres'"
+        >
+            Paramètres
+        </button>
+
+
+        {% if is_admin %}
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-section-title">
+                Administration
+            </div>
+
+            <button
+                type="button"
+                class="menu-button admin-button {% if active_page == 'profils' %}active{% endif %}"
+                onclick="window.location.href='/administration/profils'"
+            >
+                Profils
+            </button>
+
+        </div>
+
+        {% endif %}
+
+    </nav>
+
+
+    {% if profil_connecte %}
+
+    <div class="sidebar-account">
+
+        <div class="sidebar-account-header">
+
+            <div class="sidebar-avatar">
+                {{ (profil_connecte.nom or profil_connecte.username or 'U')[0] | upper }}
+            </div>
+
+            <div class="sidebar-account-info">
+
+                <div class="sidebar-account-name">
+                    {{ profil_connecte.nom or profil_connecte.username }}
+                </div>
+
+                <div class="sidebar-account-username">
+                    {{ profil_connecte.username }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% if profil_connecte.role == 'ADMIN' %}
+
+        <div class="sidebar-role admin-role">
+            ADMIN
+        </div>
+
+        {% else %}
+
+        <div class="sidebar-role user-role">
+            USER
+        </div>
+
+        {% endif %}
+
+
+        <button
+            type="button"
+            class="sidebar-logout-button"
+            id="sidebar-logout"
+        >
+            Déconnexion
+        </button>
+
+    </div>
+
+    {% endif %}
+
+</aside>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const boutonLogout =
+        document.getElementById("sidebar-logout");
+
+    if (!boutonLogout) {
+        return;
+    }
+
+    boutonLogout.addEventListener(
+        "click",
+        async function () {
+
+            boutonLogout.disabled = true;
+            boutonLogout.textContent = "Déconnexion...";
+
+            try {
+
+                const response = await fetch(
+                    "/logout",
+                    {
+                        method: "POST",
+                        credentials: "same-origin"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Impossible de fermer la session."
+                    );
+                }
+
+                window.location.href = "/login";
+
+            } catch (erreur) {
+
+                boutonLogout.disabled = false;
+                boutonLogout.textContent = "Déconnexion";
+
+                alert(
+                    erreur.message
+                    || "Déconnexion impossible."
+                );
+            }
+        }
+    );
+
+});
+</script>

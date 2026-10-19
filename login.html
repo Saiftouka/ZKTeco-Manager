@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ZKTeco Manager - Connexion</title>
+<style>
+*{box-sizing:border-box}html,body{width:100%;min-height:100%;margin:0}body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;font-family:"Segoe UI",Arial,sans-serif;color:#183149;background-color:#10263f;background-image:linear-gradient(135deg,rgba(8,27,45,.50),rgba(13,42,66,.34)),url('/static/images/Versigent-Desktop-B-3840x2160.png');background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed}.shell{width:min(960px,100%);display:grid;grid-template-columns:1.15fr .85fr;overflow:hidden;border:1px solid rgba(255,255,255,.18);border-radius:24px;background:rgba(255,255,255,.97);box-shadow:0 32px 90px rgba(0,0,0,.38)}.brand{position:relative;min-height:530px;padding:50px;overflow:hidden;background:linear-gradient(145deg,rgba(17,48,75,.98),rgba(12,39,62,.97));color:#fff}.brand:before,.brand:after{content:"";position:absolute;border-radius:50%;pointer-events:none}.brand:before{width:340px;height:340px;right:-150px;top:-140px;background:radial-gradient(circle,rgba(242,140,24,.20),transparent 67%)}.brand:after{width:280px;height:280px;left:-150px;bottom:-160px;background:radial-gradient(circle,rgba(51,159,224,.18),transparent 68%)}.brand-inner{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}.brand-kicker{display:inline-flex;align-items:center;gap:9px;width:max-content;padding:7px 11px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:rgba(255,255,255,.06);color:#dce9f2;font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}.brand-dot{width:7px;height:7px;border-radius:50%;background:#62d38b;box-shadow:0 0 0 5px rgba(98,211,139,.09)}.brand h1{margin:45px 0 14px;font-size:39px;line-height:1.06;letter-spacing:-1px}.brand p{max-width:440px;margin:0;color:#cbdce7;font-size:14px;line-height:1.75}.features{display:grid;gap:12px;margin-top:35px}.feature{display:flex;align-items:center;gap:11px;color:#d8e6ee;font-size:11px;font-weight:650}.feature-icon{display:flex;align-items:center;justify-content:center;width:31px;height:31px;flex:0 0 auto;border-radius:9px;background:rgba(255,255,255,.07);color:#62c8ef;font-size:13px}.brand-foot{margin-top:auto;padding-top:34px;color:#86a4b8;font-size:9px;line-height:1.6}.login-panel{padding:48px 42px;display:flex;align-items:center;background:rgba(255,255,255,.98)}.login-box{width:100%}.login-box h2{margin:0 0 8px;color:#172f44;font-size:27px;letter-spacing:-.3px}.subtitle{margin:0 0 30px;color:#7a8d9a;font-size:12px;line-height:1.6}.field{margin-bottom:18px}.field label{display:block;margin-bottom:7px;color:#435c6e;font-size:10px;font-weight:800;letter-spacing:.2px}.control-wrap{position:relative}.control{width:100%;height:48px;padding:0 14px;border:1px solid #ccd9e2;border-radius:10px;background:#fff;color:#213d50;outline:none;font:600 13px "Segoe UI",Arial,sans-serif;transition:border-color .18s,box-shadow .18s}.password-control{padding-right:72px}.control:focus{border-color:#45a6da;box-shadow:0 0 0 3px rgba(52,152,219,.11)}.toggle{position:absolute;right:7px;top:7px;height:34px;padding:0 10px;border:0;border-radius:7px;background:#edf6fb;color:#278bc0;cursor:pointer;font-size:9px;font-weight:800}.submit{display:flex;align-items:center;justify-content:center;width:100%;height:48px;margin-top:8px;border:0;border-radius:10px;background:linear-gradient(135deg,#359fe0,#247fb5);color:#fff;box-shadow:0 9px 20px rgba(37,137,196,.24);font:800 12px "Segoe UI",Arial,sans-serif;cursor:pointer;transition:.18s}.submit:hover{transform:translateY(-1px);filter:brightness(1.04)}.submit:disabled{opacity:.62;cursor:default;transform:none}.message{margin-bottom:18px;padding:12px 13px;border-radius:9px;font-size:10px;font-weight:700;line-height:1.5}.message.error{border-left:4px solid #dc3545;background:#fff0f1;color:#8d2932}.message.info{border-left:4px solid #3498db;background:#edf7fc;color:#286887}.security{display:flex;align-items:flex-start;gap:8px;margin-top:22px;color:#85949f;font-size:9px;line-height:1.55}.security-dot{width:6px;height:6px;margin-top:4px;flex:0 0 auto;border-radius:50%;background:#2eb66f}.footer{text-align:center;margin-top:25px;color:#9aa6ad;font-size:8px}@media(max-width:780px){.shell{grid-template-columns:1fr;max-width:520px}.brand{min-height:auto;padding:34px}.brand h1{margin-top:28px;font-size:32px}.features,.brand-foot{display:none}.login-panel{padding:34px}}@media(max-width:480px){body{padding:14px}.brand{padding:27px 24px}.login-panel{padding:30px 24px}.brand p{font-size:12px}}
+</style>
+</head>
+<body>
+<main class="shell">
+<section class="brand">
+<div class="brand-inner">
+<div class="brand-kicker"><span class="brand-dot"></span>Application sécurisée</div>
+<h1>ZKTeco<br>Manager</h1>
+<p>Connectez-vous à votre espace. Chaque profil dispose de ses propres pointeuses et de son propre historique, tout en utilisant la même application.</p>
+<div class="features">
+<div class="feature"><span class="feature-icon">✓</span><span>Pointeuses et données isolées par profil</span></div>
+<div class="feature"><span class="feature-icon">↻</span><span>Synchronisation et historique SQLite sécurisé</span></div>
+<div class="feature"><span class="feature-icon">↓</span><span>Sauvegarde, restauration et exports centralisés</span></div>
+</div>
+<div class="brand-foot">Une seule application maintenue globalement. Les évolutions fonctionnelles et visuelles sont disponibles pour tous les profils.</div>
+</div>
+</section>
+<section class="login-panel">
+<div class="login-box">
+<h2>Connexion</h2>
+<p class="subtitle">Saisissez les identifiants de votre profil ZKTeco Manager.</p>
+{% if erreur %}<div class="message error">{{ erreur }}</div>{% endif %}
+{% if message %}<div class="message info">{{ message }}</div>{% endif %}
+<form id="login-form" method="post" action="/login" autocomplete="on">
+<input type="hidden" name="next" value="{{ next_url or '/dashboard' }}">
+<div class="field"><label for="username">Nom d'utilisateur</label><div class="control-wrap"><input id="username" class="control" type="text" name="username" value="{{ username or '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus></div></div>
+<div class="field"><label for="password">Mot de passe</label><div class="control-wrap"><input id="password" class="control password-control" type="password" name="password" autocomplete="current-password" required><button id="toggle-password" class="toggle" type="button" aria-label="Afficher le mot de passe">Afficher</button></div></div>
+<button id="login-button" class="submit" type="submit">Se connecter →</button>
+</form>
+<div class="security"><span class="security-dot"></span><span>La session donne uniquement accès aux pointeuses autorisées pour le profil connecté.</span></div>
+<div class="footer">ZKTeco Manager</div>
+</div>
+</section>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+const form=document.getElementById('login-form'),button=document.getElementById('login-button'),password=document.getElementById('password'),toggle=document.getElementById('toggle-password');
+if(toggle&&password){toggle.addEventListener('click',function(){const visible=password.type==='text';password.type=visible?'password':'text';toggle.textContent=visible?'Afficher':'Masquer';toggle.setAttribute('aria-label',visible?'Afficher le mot de passe':'Masquer le mot de passe')})}
+if(form&&button){form.addEventListener('submit',function(){button.disabled=true;button.textContent='Connexion...'})}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ZKTeco Manager - Accueil
+    </title>
+
+    <link rel="stylesheet" href="/static/css/navigation.css">
+
+    <style>
+
+        /* ==========================================
+           BASE
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: #ffffff;
+
+            background-color: #10263f;
+
+            background-image:
+                url(
+                    "/static/images/Versigent-Desktop-C-3840x2160.png"
+                );
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            overflow: hidden;
+        }
+
+
+        /* ==========================================
+           PAGE
+        ========================================== */
+
+        .main {
+            min-height: 100vh;
+
+            padding: 0;
+        }
+
+
+        /* ==========================================
+           ZONE D'ACCUEIL
+        ========================================== */
+
+        .welcome-container {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-start;
+
+            width: 100%;
+            min-height: 100vh;
+
+            padding:
+                60px
+                7vw;
+        }
+
+
+        /* ==========================================
+           PANNEAU PRINCIPAL
+        ========================================== */
+
+        .welcome-panel {
+            position: relative;
+
+            width: min(
+                610px,
+                47vw
+            );
+
+            padding:
+                42px
+                46px
+                40px;
+
+            overflow: hidden;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(15, 40, 64, 0.92) 0%,
+                    rgba(19, 49, 75, 0.82) 65%,
+                    rgba(22, 55, 82, 0.72) 100%
+                );
+
+            box-shadow:
+                0 24px 60px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.24
+                );
+
+            backdrop-filter:
+                blur(8px);
+
+            -webkit-backdrop-filter:
+                blur(8px);
+
+            animation:
+                welcomeAppear
+                0.7s
+                cubic-bezier(
+                    0.22,
+                    1,
+                    0.36,
+                    1
+                )
+                both;
+        }
+
+
+        /* ==========================================
+           REFLET DISCRET
+        ========================================== */
+
+        .welcome-panel::before {
+            content: "";
+
+            position: absolute;
+
+            top: -80px;
+            right: -80px;
+
+            width: 230px;
+            height: 230px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(
+                        242,
+                        140,
+                        24,
+                        0.10
+                    ) 0%,
+                    rgba(
+                        242,
+                        140,
+                        24,
+                        0
+                    ) 70%
+                );
+
+            pointer-events: none;
+        }
+
+
+        /* ==========================================
+           PETITE ÉTIQUETTE
+        ========================================== */
+
+        .welcome-kicker {
+            position: relative;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 22px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.68
+                );
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+        }
+
+
+        .welcome-kicker::before {
+            content: "";
+
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background-color: #f28c18;
+
+            box-shadow:
+                0 0 0 5px
+                rgba(
+                    242,
+                    140,
+                    24,
+                    0.10
+                );
+        }
+
+
+        /* ==========================================
+           BIENVENUE
+        ========================================== */
+
+        .welcome-prefix {
+            position: relative;
+
+            margin-bottom: 5px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.84
+                );
+
+            font-size:
+                clamp(
+                    22px,
+                    2vw,
+                    29px
+                );
+
+            font-weight: 400;
+
+            letter-spacing: 0.2px;
+        }
+
+
+        /* ==========================================
+           TITRE PRINCIPAL
+        ========================================== */
+
+        .welcome-title {
+            position: relative;
+
+            margin: 0;
+
+            color: #ffffff;
+
+            font-size:
+                clamp(
+                    43px,
+                    4.2vw,
+                    65px
+                );
+
+            font-weight: 700;
+
+            line-height: 1.04;
+
+            letter-spacing: -1.4px;
+
+            text-shadow:
+                0 5px 22px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.22
+                );
+        }
+
+
+        /* ==========================================
+           ACCENT
+        ========================================== */
+
+        .welcome-accent {
+            position: relative;
+
+            width: 92px;
+            height: 4px;
+
+            margin-top: 24px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #f28c18 0%,
+                    #ffb34f 65%,
+                    rgba(
+                        255,
+                        179,
+                        79,
+                        0.15
+                    ) 100%
+                );
+
+            box-shadow:
+                0 0 16px
+                rgba(
+                    242,
+                    140,
+                    24,
+                    0.23
+                );
+        }
+
+
+        /* ==========================================
+           DESCRIPTION
+        ========================================== */
+
+        .welcome-description {
+            position: relative;
+
+            max-width: 430px;
+
+            margin-top: 22px;
+
+            color:
+                rgba(
+                    230,
+                    237,
+                    244,
+                    0.78
+                );
+
+            font-size: 15px;
+
+            font-weight: 400;
+
+            line-height: 1.65;
+
+            letter-spacing: 0.1px;
+        }
+
+
+        /* ==========================================
+           SIGNATURE
+        ========================================== */
+
+        .welcome-signature {
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-top: 29px;
+
+            padding-top: 19px;
+
+            border-top:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.42
+                );
+
+            font-size: 11px;
+
+            letter-spacing: 0.7px;
+        }
+
+
+        .signature-dot {
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background-color: #f28c18;
+        }
+
+
+        /* ==========================================
+           ANIMATION
+        ========================================== */
+
+        @keyframes welcomeAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 1100px) {
+
+            .welcome-panel {
+                width:
+                    min(
+                        560px,
+                        58vw
+                    );
+            }
+
+        }
+
+
+        @media (max-width: 850px) {
+
+            .welcome-container {
+                justify-content: center;
+
+                padding:
+                    40px
+                    32px;
+            }
+
+
+            .welcome-panel {
+                width: 90%;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            body {
+                overflow: auto;
+            }
+
+
+            .welcome-container {
+                padding:
+                    30px
+                    22px;
+            }
+
+
+            .welcome-panel {
+                width: 100%;
+
+                padding:
+                    32px
+                    28px;
+            }
+
+
+            .welcome-title {
+                font-size:
+                    clamp(
+                        37px,
+                        10vw,
+                        50px
+                    );
+            }
+
+
+            .welcome-prefix {
+                font-size: 20px;
+            }
+
+        }
+
+
+        /* ==========================================
+           ACCESSIBILITÉ
+        ========================================== */
+
+        @media (
+            prefers-reduced-motion:
+            reduce
+        ) {
+
+            .welcome-panel {
+                animation: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- MENU -->
+
+    {% include "sidebar.html" %}
+
+
+    <!-- ACCUEIL -->
+
+    <main class="main">
+
+
+        <section class="welcome-container">
+
+
+            <div class="welcome-panel">
+
+
+                <div class="welcome-kicker">
+                    Interface de gestion
+                </div>
+
+
+                <div class="welcome-prefix">
+                    Bienvenue dans
+                </div>
+
+
+                <h1 class="welcome-title">
+                    ZKTeco Manager
+                </h1>
+
+
+                <div class="welcome-accent"></div>
+
+
+                <p class="welcome-description">
+                    Gestion centralisée et supervision
+                    de vos pointeuses ZKTeco.
+                </p>
+
+
+                <div class="welcome-signature">
+
+                    <span class="signature-dot"></span>
+
+                    Solution de gestion des terminaux
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Import Excel - ZKTeco Manager</title>
+<link rel="stylesheet" href="/static/css/navigation.css">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;background:#10263f url('/static/images/Versigent-Desktop-B-3840x2160.png') center/cover fixed no-repeat;color:#243746}.main{min-height:100vh;padding:40px 30px}.container{width:100%;max-width:850px;margin:auto}.title-box,.card,.message{border-radius:14px}.title-box{margin-bottom:24px;padding:22px 25px;background:rgba(20,48,76,.94);color:#fff}.title-box h1{margin:0 0 7px;font-size:28px}.title-box p{margin:0;color:#dce8f0;font-size:13px}.card{margin-bottom:22px;padding:25px;background:rgba(255,255,255,.97);box-shadow:0 14px 35px rgba(0,0,0,.2)}.card h2{margin:0 0 20px;color:#17324d;font-size:18px}.field{margin-bottom:20px}label{display:block;margin-bottom:7px;color:#34495e;font-size:12px;font-weight:700}select,input[type=file]{width:100%;min-height:44px;padding:9px 11px;border:1px solid #ccd7df;border-radius:8px;background:#fff;font-family:inherit}.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}.rule{padding:15px 10px;border:1px solid #e0e7ec;border-radius:10px;background:#f7f9fb;text-align:center}.rule-value{margin-bottom:5px;color:#2387c1;font-size:14px;font-weight:700}.rule-type{color:#526978;font-size:11px;font-weight:600}.button-row{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}button{min-height:42px;padding:10px 18px;border:0;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}.analyse-button{background:#298fc8;color:#fff}.import-button{background:#209653;color:#fff}.cancel-button{background:#e9edef;color:#425563}.message{margin-bottom:20px;padding:17px 19px}.success{border-left:4px solid #27ae60;background:#effaf4;color:#17663a}.error{border-left:4px solid #d64545;background:#fff1f1;color:#7f2929}.error-item{margin-top:10px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.7)}.error-item ul{margin:6px 0 0;padding-left:20px}.table-wrapper{overflow-x:auto}.table{width:100%;border-collapse:collapse}.table th{padding:11px 12px;background:#17324d;color:#fff;font-size:11px;text-align:left}.table td{padding:10px 12px;border-bottom:1px solid #e5eaee;font-size:11px}.ready{color:#188849;font-weight:700}@media(max-width:700px){.main{padding:20px 12px}.rules{grid-template-columns:1fr}.button-row{flex-direction:column}.button-row button{width:100%}}
+</style>
+</head>
+<body>
+{% include "sidebar.html" %}
+<main class="main"><div class="container">
+<div class="title-box"><h1>Import Excel des employés</h1><p>Choisissez une pointeuse et un fichier Excel. Les données sont reconnues automatiquement.</p></div>
+
+{% if resultat_import %}
+<div class="message {{ 'success' if resultat_import.success else 'error' }}"><strong>{{ 'Import terminé' if resultat_import.success else 'Import impossible' }}</strong><br>{% if resultat_import.success %}{{ resultat_import.nombre_importes or 0 }} employé(s) importé(s).{% else %}{{ resultat_import.erreur or "L'import a échoué." }}{% endif %}</div>
+{% endif %}
+
+<div class="card"><h2>Sélectionner le fichier</h2>
+<form id="analyse-form" method="post" action="/import-excel/analyser" enctype="multipart/form-data">
+<div class="field"><label for="pointeuse_id">Pointeuse</label><select id="pointeuse_id" name="pointeuse_id" required><option value="">Choisir une pointeuse</option>{% for pointeuse in pointeuses %}<option value="{{ pointeuse.id }}" {% if pointeuse_id and pointeuse.id|string == pointeuse_id|string %}selected{% endif %}>{{ pointeuse.nom }} - {{ pointeuse.ip }} : {{ pointeuse.port }}{% if pointeuse.active %} - ACTIVE{% else %} - INACTIVE{% endif %}</option>{% endfor %}</select></div>
+<div class="field"><label for="fichier">Fichier Excel</label><input id="fichier" name="fichier" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required></div>
+<div class="rules"><div class="rule"><div class="rule-value">1 à 5 chiffres</div><div class="rule-type">MATRICULE</div></div><div class="rule"><div class="rule-value">Texte</div><div class="rule-type">NOM &amp; PRÉNOM</div></div><div class="rule"><div class="rule-value">6 chiffres et plus</div><div class="rule-type">BADGE / CARTE</div></div></div>
+<div class="button-row"><button type="button" class="cancel-button" onclick="window.location.href='/pointeuses'">Annuler</button><button id="analyse-button" type="submit" class="analyse-button">Analyser le fichier</button></div>
+</form></div>
+
+{% if analyse_excel and not analyse_excel.success %}
+<div class="message error"><strong>Erreurs dans le fichier Excel</strong>{% for erreur in analyse_excel.erreurs %}<div class="error-item">{% if erreur is mapping %}<strong>Ligne {{ erreur.ligne or '?' }}</strong>{% if erreur.nom %} - {{ erreur.nom }}{% endif %}{% if erreur.erreurs %}<ul>{% for m in erreur.erreurs %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}{% else %}{{ erreur }}{% endif %}</div>{% endfor %}</div>
+{% endif %}
+
+{% if analyse_excel and analyse_excel.success %}<div class="message success"><strong>Fichier analysé</strong><br>{{ analyse_excel.nombre or 0 }} employé(s) reconnu(s).</div>{% endif %}
+
+{% if preparation_import %}
+{% if preparation_import.nombre_valides %}<div class="message success"><strong>Employés prêts à importer</strong><br>{{ preparation_import.nombre_valides or 0 }} employé(s).</div>{% endif %}
+{% if preparation_import.nombre_erreurs %}<div class="message error"><strong>Employés déjà présents ou en conflit</strong>{% for erreur in preparation_import.erreurs %}<div class="error-item"><strong>Ligne {{ erreur.ligne or '?' }}</strong>{% if erreur.nom %} - {{ erreur.nom }}{% endif %}{% if erreur.matricule %}<br>Matricule : {{ erreur.matricule }}{% endif %}{% if erreur.badge %}<br>Badge : {{ erreur.badge }}{% endif %}{% if erreur.erreurs %}<ul>{% for m in erreur.erreurs %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}</div>{% endfor %}</div>{% endif %}
+{% endif %}
+
+{% if preparation_import and preparation_import.valides %}<div class="card"><h2>Employés à importer</h2><div class="table-wrapper"><table class="table"><thead><tr><th>Matricule</th><th>Nom &amp; Prénom</th><th>Badge / Carte</th><th>État</th></tr></thead><tbody>{% for employe in preparation_import.valides %}<tr><td>{{ employe.matricule }}</td><td>{{ employe.nom }}</td><td>{{ employe.badge }}</td><td class="ready">Prêt</td></tr>{% endfor %}</tbody></table></div></div>{% endif %}
+
+{% if import_id %}<div class="card"><h2>Confirmer l'import</h2><p>Seuls les employés validés ci-dessus seront importés.</p><form id="import-form" method="post" action="/import-excel/importer"><input type="hidden" name="import_id" value="{{ import_id }}"><div class="button-row"><button id="import-button" type="submit" class="import-button">Importer les employés</button></div></form></div>{% endif %}
+</div></main>
+<script>
+document.addEventListener('DOMContentLoaded',function(){const af=document.getElementById('analyse-form');const ab=document.getElementById('analyse-button');if(af&&ab){af.addEventListener('submit',function(){ab.disabled=true;ab.textContent='Analyse en cours...';});}const inf=document.getElementById('import-form');const ib=document.getElementById('import-button');if(inf&&ib){inf.addEventListener('submit',function(){ib.disabled=true;ib.textContent='Import en cours...';});}});
+</script>
+</body></html>

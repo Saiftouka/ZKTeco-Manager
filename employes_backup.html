@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZKTeco Manager - Employés</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333333;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background-color: #182433;
+            color: white;
+        }
+
+        .logo {
+            padding: 25px 20px;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #2c3b4d;
+        }
+
+        .mode-test {
+            margin: 20px;
+            padding: 10px;
+            text-align: center;
+            background-color: #e67e22;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        /* MENU */
+
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-item {
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background-color: #223348;
+        }
+
+        .menu-item.active {
+            background-color: #223348;
+            border-left-color: #3498db;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 16px 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .menu-link:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .menu-disabled {
+            display: block;
+            padding: 16px 25px;
+            color: white;
+            font-size: 16px;
+        }
+
+        /* CONTENU */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #777777;
+        }
+
+        /* BOUTON AJOUTER */
+
+        .btn-primary {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* COMPTEUR */
+
+        .summary {
+            margin-bottom: 25px;
+            padding: 22px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .summary-title {
+            color: #777777;
+            font-size: 14px;
+        }
+
+        .summary-number {
+            margin-top: 8px;
+            color: #3498db;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* TABLEAU */
+
+        .table-container {
+            overflow: hidden;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #223348;
+            color: white;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .uid {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .matricule {
+            font-weight: bold;
+        }
+
+        .badge {
+            font-family: Consolas, monospace;
+        }
+
+        /* PROFILS */
+
+        .profile {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .profile-admin {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .profile-user {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        /* MESSAGES */
+
+        .error-box {
+            margin-bottom: 25px;
+            padding: 18px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 5px solid #dc3545;
+            border-radius: 6px;
+        }
+
+        .empty {
+            padding: 35px;
+            text-align: center;
+            color: #777777;
+        }
+
+        .warning {
+            margin-top: 25px;
+            padding: 16px;
+            background-color: #fff3cd;
+            color: #856404;
+            border-left: 5px solid #ffc107;
+            border-radius: 5px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .header {
+                display: block;
+            }
+
+            .btn-primary {
+                margin-top: 20px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            ZKTeco Manager
+        </div>
+
+        <div class="mode-test">
+            MODE TEST
+        </div>
+
+        <ul class="menu">
+
+            <li class="menu-item">
+                /
+                    Dashboard
+                </a>
+            </li>
+
+            <li class="menu-item active">
+                /employes
+                    Employés
+                </a>
+            </li>
+
+            <li class="menu-item">
+                <span class="menu-disabled">
+                    Import Excel
+                </span>
+            </li>
+
+            <li class="menu-item">
+                <span class="menu-disabled">
+                    Pointages
+                </span>
+            </li>
+
+            <li class="menu-item">
+                <span class="menu-disabled">
+                    Pointeuses
+                </span>
+            </li>
+
+            <li class="menu-item">
+                <span class="menu-disabled">
+                    Paramètres
+                </span>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <main class="main">
+
+        <div class="header">
+
+            <div>
+                <h1>Employés</h1>
+
+                <p>
+                    Utilisateurs enregistrés dans la pointeuse ZKTeco
+                </p>
+            </div>
+
+            /employes/ajouter
+                + Ajouter un employé
+            </a>
+
+        </div>
+
+
+        {% if not resultat.success %}
+
+        <div class="error-box">
+
+            <strong>
+                Impossible de récupérer les utilisateurs.
+            </strong>
+
+            <br><br>
+
+            {{ resultat.erreur }}
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="summary">
+
+            <div class="summary-title">
+                Nombre d'utilisateurs
+            </div>
+
+            <div class="summary-number">
+                {{ resultat.nombre }}
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            {% if utilisateurs %}
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>UID</th>
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Badge</th>
+                        <th>Profil</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for utilisateur in utilisateurs %}
+
+                    <tr>
+
+                        <td class="uid">
+                            {{ utilisateur.uid }}
+                        </td>
+
+                        <td class="matricule">
+                            {{ utilisateur.matricule }}
+                        </td>
+
+                        <td>
+                            {% if utilisateur.nom %}
+                                {{ utilisateur.nom }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td class="badge">
+                            {% if utilisateur.badge %}
+                                {{ utilisateur.badge }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+
+                            {% if utilisateur.profil == "Super Admin" %}
+
+                            <span class="profile profile-admin">
+                                Super Admin
+                            </span>
+
+                            {% else %}
+
+                            <span class="profile profile-user">
+                                Utilisateur
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty">
+                Aucun utilisateur trouvé dans la pointeuse.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="warning">
+
+            <strong>
+                Mode lecture
+            </strong>
+
+            <br><br>
+
+            Les utilisateurs affichés proviennent directement de la pointeuse BACKUP :
+            <strong>10.227.198.96</strong>
+
+            <br>
+
+            Pointeuse PRODUCTION :
+            <strong>10.227.198.95 - BLOQUÉE</strong>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

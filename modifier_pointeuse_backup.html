@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ZKTeco Manager - Modifier une pointeuse
+    </title>
+
+    /static/css/navigation.css
+
+    <style>
+
+        /* ==========================================
+           BASE
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            color: #333333;
+
+            background-color: #f4f6f9;
+        }
+
+
+        /* ==========================================
+           CONTENU
+        ========================================== */
+
+        .main {
+            min-height: 100vh;
+
+            padding: 30px;
+        }
+
+
+        /* ==========================================
+           ENTÊTE
+        ========================================== */
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+
+            color: #263442;
+
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #777777;
+
+            font-size: 15px;
+        }
+
+
+        /* ==========================================
+           CARTE PROFIL
+        ========================================== */
+
+        .profile-card {
+            width: 100%;
+            max-width: 900px;
+
+            padding: 30px;
+
+            background-color: #ffffff;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* ==========================================
+           ENTÊTE PROFIL
+        ========================================== */
+
+        .profile-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 28px;
+
+            padding-bottom: 20px;
+
+            border-bottom:
+                1px solid #eeeeee;
+        }
+
+        .profile-name {
+            color: #263442;
+
+            font-size: 22px;
+
+            font-weight: bold;
+        }
+
+        .profile-id {
+            margin-top: 6px;
+
+            color: #777777;
+
+            font-size: 13px;
+        }
+
+
+        /* ==========================================
+           STATUT
+        ========================================== */
+
+        .status {
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            border-radius: 15px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+
+            color: #155724;
+        }
+
+        .status-inactive {
+            background-color: #e9ecef;
+
+            color: #555555;
+        }
+
+
+        /* ==========================================
+           FORMULAIRE
+        ========================================== */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+        .form-full {
+            grid-column:
+                1 / -1;
+        }
+
+        label {
+            margin-bottom: 8px;
+
+            color: #333333;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+
+            min-height: 42px;
+
+            padding: 12px 14px;
+
+            border:
+                1px solid #cccccc;
+
+            border-radius: 6px;
+
+            background-color: #ffffff;
+
+            color: #333333;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 15px;
+
+            transition:
+                border-color 0.18s ease,
+                box-shadow 0.18s ease;
+        }
+
+        input:focus {
+            border-color: #3498db;
+
+            outline: none;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(52, 152, 219, 0.10);
+        }
+
+        .help {
+            margin-top: 6px;
+
+            color: #777777;
+
+            font-size: 12px;
+        }
+
+
+        /* ==========================================
+           STATUT ACTIF
+        ========================================== */
+
+        .active-box {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            min-height: 42px;
+
+            padding: 14px;
+
+            background-color: #f8f9fa;
+
+            border-radius: 6px;
+        }
+
+        .active-box input {
+            width: auto;
+
+            min-height: auto;
+
+            accent-color: #3498db;
+        }
+
+        .active-box label {
+            margin: 0;
+        }
+
+
+        /* ==========================================
+           ACTIONS
+        ========================================== */
+
+        .actions {
+            display: flex;
+
+            justify-content: flex-end;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 30px;
+
+            padding-top: 22px;
+
+            border-top:
+                1px solid #eeeeee;
+        }
+
+
+        /* ==========================================
+           BOUTONS
+        ========================================== */
+
+        .btn {
+            min-height: 42px;
+
+            padding: 12px 20px;
+
+            border: 0;
+
+            border-radius: 6px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                background-color 0.18s ease,
+                transform 0.18s ease,
+                box-shadow 0.18s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform:
+                translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.55;
+
+            cursor: not-allowed;
+        }
+
+
+        /* ANNULER */
+
+        .btn-secondary {
+            background-color: #e9ecef;
+
+            color: #333333;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #dfe3e7;
+        }
+
+
+        /* TESTER */
+
+        .btn-primary {
+            background-color: #3498db;
+
+            color: #ffffff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #2980b9;
+
+            box-shadow:
+                0 4px 12px
+                rgba(52, 152, 219, 0.22);
+        }
+
+
+        /* ENREGISTRER */
+
+        .btn-success {
+            background-color: #28a745;
+
+            color: #ffffff;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background-color: #218838;
+
+            box-shadow:
+                0 4px 12px
+                rgba(40, 167, 69, 0.22);
+        }
+
+
+        /* ==========================================
+           MESSAGES
+        ========================================== */
+
+        .message {
+            display: none;
+
+            width: 100%;
+            max-width: 900px;
+
+            margin-top: 25px;
+
+            padding: 18px;
+
+            border-radius: 6px;
+
+            line-height: 1.6;
+        }
+
+        .message-success {
+            display: block;
+
+            background-color: #d4edda;
+
+            color: #155724;
+
+            border-left:
+                5px solid #28a745;
+        }
+
+        .message-error {
+            display: block;
+
+            background-color: #f8d7da;
+
+            color: #721c24;
+
+            border-left:
+                5px solid #dc3545;
+        }
+
+        .message-title {
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+
+        /* ==========================================
+           INFORMATION
+        ========================================== */
+
+        .info-box {
+            width: 100%;
+            max-width: 900px;
+
+            margin-top: 25px;
+
+            padding: 16px;
+
+            background-color: #d9edf7;
+
+            color: #31708f;
+
+            border-left:
+                5px solid #3498db;
+
+            border-radius: 5px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 800px) {
+
+            .main {
+                padding: 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-full {
+                grid-column: auto;
+            }
+
+            .profile-header {
+                align-items: flex-start;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .profile-card {
+                padding: 22px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .actions .btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         NOUVEAU MENU PARTAGÉ
+    ========================================== -->
+
+    {% include "sidebar.html" %}
+
+
+    <!-- ==========================================
+         CONTENU
+    ========================================== -->
+
+    <main class="main">
+
+
+        {% if erreur or not pointeuse %}
+
+
+        <div class="message message-error">
+
+            <div class="message-title">
+                Erreur
+            </div>
+
+            {{ erreur or "Pointeuse introuvable." }}
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- ======================================
+             ENTÊTE
+        ======================================= -->
+
+        <div class="header">
+
+            <h1>
+                Profil de la pointeuse
+            </h1>
+
+            <p>
+                Consulter et modifier directement
+                la configuration
+            </p>
+
+        </div>
+
+
+        <!-- ======================================
+             PROFIL
+        ======================================= -->
+
+        <div class="profile-card">
+
+
+            <div class="profile-header">
+
+
+                <div>
+
+                    <div
+                        id="titre-pointeuse"
+                        class="profile-name"
+                    >
+                        {{ pointeuse.nom }}
+                    </div>
+
+                    <div class="profile-id">
+                        ID : {{ pointeuse.id }}
+                    </div>
+
+                </div>
+
+
+                <span
+                    id="statut-pointeuse"
+                    class="status"
+                >
+                </span>
+
+
+            </div>
+
+
+            <!-- ==================================
+                 FORMULAIRE
+            =================================== -->
+
+            <div class="form-grid">
+
+
+                <!-- NOM -->
+
+                <div class="form-group">
+
+                    <label for="nom">
+                        Nom de la pointeuse
+                    </label>
+
+                    <input
+                        id="nom"
+                        type="text"
+                        value="{{ pointeuse.nom }}"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- IP -->
+
+                <div class="form-group">
+
+                    <label for="ip">
+                        Adresse IP
+                    </label>
+
+                    <input
+                        id="ip"
+                        type="text"
+                        value="{{ pointeuse.ip }}"
+                        autocomplete="off"
+                    >
+
+                    <span class="help">
+                        Réseau autorisé : 10.227.198.x
+                    </span>
+
+                </div>
+
+
+                <!-- PORT -->
+
+                <div class="form-group">
+
+                    <label for="port">
+                        Port
+                    </label>
+
+                    <input
+                        id="port"
+                        type="number"
+                        value="{{ pointeuse.port }}"
+                        min="1"
+                        max="65535"
+                    >
+
+                </div>
+
+
+                <!-- STATUT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Statut
+                    </label>
+
+                    <div class="active-box">
+
+                        <input
+                            id="active"
+                            type="checkbox"
+                        >
+
+                        <label for="active">
+                            Pointeuse active
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==================================
+                 ACTIONS
+            =================================== -->
+
+            <div class="actions">
+
+
+                <button
+                    id="btn-annuler"
+                    class="btn btn-secondary"
+                    type="button"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    id="btn-tester"
+                    class="btn btn-primary"
+                    type="button"
+                >
+                    Tester la connexion
+                </button>
+
+
+                <button
+                    id="btn-enregistrer"
+                    class="btn btn-success"
+                    type="button"
+                >
+                    Enregistrer les modifications
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ======================================
+             RÉSULTAT
+        ======================================= -->
+
+        <div
+            id="resultat"
+            class="message"
+        >
+        </div>
+
+
+        <!-- ======================================
+             INFORMATION
+        ======================================= -->
+
+        <div class="info-box">
+
+            <strong>
+                Modification directe
+            </strong>
+
+            <br><br>
+
+            Vous pouvez modifier directement le nom,
+            l'adresse IP, le port et le statut
+            de la pointeuse.
+
+            <br><br>
+
+            Le test de connexion est facultatif.
+
+        </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+    {% if pointeuse %}
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                const pointeuseId =
+                    "{{ pointeuse.id }}";
+
+
+                const activeInitial =
+                    "{{ 'true' if pointeuse.active else 'false' }}";
+
+
+                const activeCheckbox =
+                    document.getElementById(
+                        "active"
+                    );
+
+
+                const statusElement =
+                    document.getElementById(
+                        "statut-pointeuse"
+                    );
+
+
+                const cancelButton =
+                    document.getElementById(
+                        "btn-annuler"
+                    );
+
+
+                const testButton =
+                    document.getElementById(
+                        "btn-tester"
+                    );
+
+
+                const saveButton =
+                    document.getElementById(
+                        "btn-enregistrer"
+                    );
+
+
+                const resultBox =
+                    document.getElementById(
+                        "resultat"
+                    );
+
+
+                /* ==================================
+                   INITIALISATION
+                ================================== */
+
+                activeCheckbox.checked =
+                    activeInitial === "true";
+
+
+                actualiserStatut();
+
+
+                /* ==================================
+                   STATUT
+                ================================== */
+
+                function actualiserStatut() {
+
+
+                    if (
+                        activeCheckbox.checked
+                    ) {
+
+                        statusElement.className =
+                            "status status-active";
+
+                        statusElement.textContent =
+                            "ACTIVE";
+
+                    } else {
+
+                        statusElement.className =
+                            "status status-inactive";
+
+                        statusElement.textContent =
+                            "INACTIVE";
+
+                    }
+
+
+                }
+
+
+                /* ==================================
+                   LECTURE DES CHAMPS
+                ================================== */
+
+                function lireDonnees() {
+
+
+                    return {
+
+                        nom:
+                            document
+                                .getElementById(
+                                    "nom"
+                                )
+                                .value
+                                .trim(),
+
+                        ip:
+                            document
+                                .getElementById(
+                                    "ip"
+                                )
+                                .value
+                                .trim(),
+
+                        port:
+                            document
+                                .getElementById(
+                                    "port"
+                                )
+                                .value
+                                .trim(),
+
+                        active:
+                            activeCheckbox.checked
+
+                    };
+
+
+                }
+
+
+                /* ==================================
+                   AFFICHER ERREUR
+                ================================== */
+
+                function afficherErreur(
+                    message
+                ) {
+
+
+                    resultBox.className =
+                        "message message-error";
+
+
+                    resultBox.innerHTML =
+                        "<div class='message-title'>"
+                        + "Erreur"
+                        + "</div>"
+                        + message;
+
+
+                }
+
+
+                /* ==================================
+                   AFFICHER SUCCES
+                ================================== */
+
+                function afficherSucces(
+                    titre,
+                    message
+                ) {
+
+
+                    resultBox.className =
+                        "message message-success";
+
+
+                    resultBox.innerHTML =
+                        "<div class='message-title'>"
+                        + titre
+                        + "</div>"
+                        + message;
+
+
+                }
+
+
+                /* ==================================
+                   VALIDATION
+                ================================== */
+
+                function validerDonnees(
+                    donnees
+                ) {
+
+
+                    if (!donnees.nom) {
+
+                        afficherErreur(
+                            "Le nom est obligatoire."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    if (!donnees.ip) {
+
+                        afficherErreur(
+                            "L'adresse IP est obligatoire."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    if (
+                        !donnees.ip.startsWith(
+                            "10.227.198."
+                        )
+                    ) {
+
+                        afficherErreur(
+                            "L'adresse IP doit appartenir "
+                            + "au réseau 10.227.198.x."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    const port =
+                        Number(
+                            donnees.port
+                        );
+
+
+                    if (
+                        !Number.isInteger(
+                            port
+                        )
+                        || port < 1
+                        || port > 65535
+                    ) {
+
+                        afficherErreur(
+                            "Le port doit être compris "
+                            + "entre 1 et 65535."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    return true;
+
+
+                }
+
+
+                /* ==================================
+                   CORPS POST
+                ================================== */
+
+                function creerBody(
+                    donnees
+                ) {
+
+
+                    const body =
+                        new URLSearchParams();
+
+
+                    body.set(
+                        "nom",
+                        donnees.nom
+                    );
+
+
+                    body.set(
+                        "ip",
+                        donnees.ip
+                    );
+
+
+                    body.set(
+                        "port",
+                        donnees.port
+                    );
+
+
+                    body.set(
+                        "active",
+                        donnees.active
+                            ? "true"
+                            : "false"
+                    );
+
+
+                    return body;
+
+
+                }
+
+
+                /* ==================================
+                   ANNULER
+                ================================== */
+
+                cancelButton.addEventListener(
+                    "click",
+                    function () {
+
+                        window.location.href =
+                            "/pointeuses";
+
+                    }
+                );
+
+
+                /* ==================================
+                   CHANGEMENT DU STATUT
+                ================================== */
+
+                activeCheckbox.addEventListener(
+                    "change",
+                    actualiserStatut
+                );
+
+
+                /* ==================================
+                   TEST CONNEXION
+                ================================== */
+
+                testButton.addEventListener(
+                    "click",
+                    async function () {
+
+
+                        const donnees =
+                            lireDonnees();
+
+
+                        if (
+                            !validerDonnees(
+                                donnees
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        testButton.disabled =
+                            true;
+
+
+                        testButton.textContent =
+                            "Test en cours...";
+
+
+                        try {
+
+
+                            const url =
+                                "/pointeuses/"
+                                + encodeURIComponent(
+                                    pointeuseId
+                                )
+                                + "/tester-modification";
+
+
+                            const response =
+                                await fetch(
+                                    url,
+                                    {
+                                        method: "POST",
+
+                                        headers: {
+                                            "Content-Type":
+                                                "application/x-www-form-urlencoded"
+                                        },
+
+                                        body:
+                                            creerBody(
+                                                donnees
+                                            ).toString()
+                                    }
+                                );
+
+
+                            const resultat =
+                                await response.json();
+
+
+                            if (
+                                !response.ok
+                                || !resultat.success
+                            ) {
+
+                                afficherErreur(
+                                    resultat.erreur
+                                    || "Connexion impossible."
+                                );
+
+                                return;
+
+                            }
+
+
+                            const ping =
+                                resultat.ping
+                                    ? "OK"
+                                    : "Non disponible";
+
+
+                            const message =
+                                "Adresse IP : <strong>"
+                                + resultat.ip
+                                + "</strong><br>"
+                                + "Port : <strong>"
+                                + resultat.port
+                                + "</strong><br>"
+                                + "Ping : <strong>"
+                                + ping
+                                + "</strong><br>"
+                                + "Firmware : <strong>"
+                                + (
+                                    resultat.firmware
+                                    || "Indisponible"
+                                )
+                                + "</strong><br>"
+                                + "Heure : <strong>"
+                                + (
+                                    resultat.heure
+                                    || "Indisponible"
+                                )
+                                + "</strong>";
+
+
+                            afficherSucces(
+                                "Connexion réussie",
+                                message
+                            );
+
+
+                        }
+
+                        catch (erreur) {
+
+
+                            afficherErreur(
+                                "Erreur pendant le test : "
+                                + erreur.message
+                            );
+
+
+                        }
+
+                        finally {
+
+
+                            testButton.disabled =
+                                false;
+
+
+                            testButton.textContent =
+                                "Tester la connexion";
+
+
+                        }
+
+
+                    }
+                );
+
+
+                /* ==================================
+                   ENREGISTRER
+                ================================== */
+
+                saveButton.addEventListener(
+                    "click",
+                    async function () {
+
+
+                        const donnees =
+                            lireDonnees();
+
+
+                        if (
+                            !validerDonnees(
+                                donnees
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const message =
+                            "Confirmer les modifications ?\n\n"
+                            + "Nom : "
+                            + donnees.nom
+                            + "\n"
+                            + "Adresse IP : "
+                            + donnees.ip
+                            + "\n"
+                            + "Port : "
+                            + donnees.port
+                            + "\n"
+                            + "Active : "
+                            + (
+                                donnees.active
+                                    ? "Oui"
+                                    : "Non"
+                            );
+
+
+                        const confirmation =
+                            window.confirm(
+                                message
+                            );
+
+
+                        if (!confirmation) {
+
+                            return;
+
+                        }
+
+
+                        saveButton.disabled =
+                            true;
+
+
+                        saveButton.textContent =
+                            "Enregistrement...";
+
+
+                        try {
+
+
+                            const url =
+                                "/pointeuses/"
+                                + encodeURIComponent(
+                                    pointeuseId
+                                )
+                                + "/enregistrer-modification";
+
+
+                            const response =
+                                await fetch(
+                                    url,
+                                    {
+                                        method: "POST",
+
+                                        headers: {
+                                            "Content-Type":
+                                                "application/x-www-form-urlencoded"
+                                        },
+
+                                        body:
+                                            creerBody(
+                                                donnees
+                                            ).toString()
+                                    }
+                                );
+
+
+                            const resultat =
+                                await response.json();
+
+
+                            if (
+                                !response.ok
+                                || !resultat.success
+                            ) {
+
+                                afficherErreur(
+                                    resultat.erreur
+                                    || "Modification impossible."
+                                );
+
+                                return;
+
+                            }
+
+
+                            document
+                                .getElementById(
+                                    "titre-pointeuse"
+                                )
+                                .textContent =
+                                    donnees.nom;
+
+
+                            actualiserStatut();
+
+
+                            afficherSucces(
+                                "Modifications enregistrées",
+                                "La configuration a été "
+                                + "mise à jour avec succès."
+                            );
+
+
+                        }
+
+                        catch (erreur) {
+
+
+                            afficherErreur(
+                                "Erreur pendant l'enregistrement : "
+                                + erreur.message
+                            );
+
+
+                        }
+
+                        finally {
+
+
+                            saveButton.disabled =
+                                false;
+
+
+                            saveButton.textContent =
+                                "Enregistrer les modifications";
+
+
+                        }
+
+
+                    }
+                );
+
+
+            }
+        );
+
+    </script>
+
+
+    {% endif %}
+
+
+</body>
+
+</html>

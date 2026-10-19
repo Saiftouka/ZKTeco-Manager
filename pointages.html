@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZKTeco Manager - Pointages</title>
+
+    <link
+    rel="stylesheet"
+    href="/static/css/navigation.css"
+>
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #183149;
+            background:
+                #10263f
+                url('/static/images/Versigent-Desktop-B-3840x2160.png')
+                center/cover fixed no-repeat;
+        }
+
+        .main {
+            min-height: 100vh;
+            padding: 34px 38px 60px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1280px;
+            margin: auto;
+        }
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        .header {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 26px;
+            padding: 25px 28px;
+            border: 1px solid rgba(255, 255, 255, .06);
+            border-radius: 16px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(22, 50, 79, .96),
+                    rgba(17, 45, 70, .92)
+                );
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+        }
+
+        .header:after {
+            content: "";
+            position: absolute;
+            top: -75px;
+            right: -55px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(242, 140, 24, .14),
+                    transparent 70%
+                );
+        }
+
+        .header h1 {
+            position: relative;
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .header p {
+            position: relative;
+            margin: 0;
+            color: #dbe7ef;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .header-meta {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .06);
+            color: #dce9f2;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .meta-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #62d38b;
+        }
+
+        /* =====================================================
+           GRILLE
+           ===================================================== */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        /* =====================================================
+           CARTE POINTEUSE
+           ===================================================== */
+
+        .card {
+            position: relative;
+            overflow: hidden;
+            padding: 24px;
+            border: 2px solid rgba(255, 255, 255, .55);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 14px 34px rgba(3, 20, 36, .23);
+            transition: .2s;
+        }
+
+        .card:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 32px;
+            right: 32px;
+            height: 4px;
+            background: linear-gradient(90deg, #f28c18, #ffb34c);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(242, 140, 24, .55);
+        }
+
+        .top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .name {
+            color: #172f44;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .address {
+            margin-top: 6px;
+            color: #788b9a;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            margin-right: 6px;
+            border-radius: 50%;
+            background: #42ade5;
+        }
+
+        /* =====================================================
+           SYNCHRONISATION AUTOMATIQUE
+           ===================================================== */
+
+        .auto-sync-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            margin: -6px 0 14px;
+            padding: 10px 12px;
+
+            border: 1px solid #dce9e2;
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7fcf9,
+                    #f2faf6
+                );
+
+            transition: .2s;
+        }
+
+        .auto-sync-left {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #3d6c56;
+
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .auto-sync-dot {
+            width: 7px;
+            height: 7px;
+            flex: 0 0 auto;
+
+            border-radius: 50%;
+
+            background: #2eb66f;
+
+            box-shadow:
+                0 0 0 3px rgba(46, 182, 111, .12);
+        }
+
+        .auto-sync-times {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+
+            color: #71868b;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .auto-sync-times strong {
+            color: #426070;
+            font-weight: 800;
+        }
+
+        /* Synchro en cours */
+
+        .auto-sync-status.running {
+            border-color: #cce7f5;
+            background: #f2faff;
+        }
+
+        .auto-sync-status.running .auto-sync-left {
+            color: #267ca8;
+        }
+
+        .auto-sync-status.running .auto-sync-dot {
+            background: #35a7e0;
+            animation: syncPulse 1.2s infinite;
+        }
+
+        /* Synchro échouée */
+
+        .auto-sync-status.failed {
+            border-color: #f0d8d8;
+            background: #fff8f8;
+        }
+
+        .auto-sync-status.failed .auto-sync-left {
+            color: #a64a50;
+        }
+
+        .auto-sync-status.failed .auto-sync-dot {
+            background: #dc5a62;
+
+            box-shadow:
+                0 0 0 3px rgba(220, 90, 98, .12);
+        }
+
+        @keyframes syncPulse {
+            0% {
+                box-shadow:
+                    0 0 0 0 rgba(53, 167, 224, .35);
+            }
+
+            70% {
+                box-shadow:
+                    0 0 0 7px rgba(53, 167, 224, 0);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 0 0 rgba(53, 167, 224, 0);
+            }
+        }
+
+        /* =====================================================
+           RESULTAT SYNCHRONISATION
+           ===================================================== */
+
+        .sync-info {
+            display: none;
+            margin: -5px 0 15px;
+            padding: 10px 12px;
+            border-radius: 9px;
+            background: #edf8fd;
+            color: #34718f;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .sync-info.visible {
+            display: block;
+        }
+
+        .sync-info.sync-error {
+            background: #fff1f2;
+            color: #922e37;
+        }
+
+        /* =====================================================
+           RAPPORT
+           ===================================================== */
+
+        .report {
+            padding: 18px;
+            border: 1px solid #d8e9e0;
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fbfefd,
+                    #f5fbf8
+                );
+        }
+
+        .report-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .report-title strong {
+            color: #203a4d;
+            font-size: 14px;
+        }
+
+        .report-title small {
+            display: block;
+            margin-top: 4px;
+            color: #8b99a3;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: .8px;
+        }
+
+        .excel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 36px;
+            height: 36px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #28a96b,
+                    #168c51
+                );
+
+            color: #fff;
+
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        /* =====================================================
+           DATES
+           ===================================================== */
+
+        .dates {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 15px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #687f90;
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .field input {
+            width: 100%;
+            height: 44px;
+            padding: 0 12px;
+
+            border: 1px solid #cedbe4;
+            border-radius: 9px;
+
+            background: #fff;
+            color: #284255;
+
+            font:
+                600 11px
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: #5bb0de;
+
+            box-shadow:
+                0 0 0 3px rgba(52, 152, 219, .1);
+        }
+
+        /* =====================================================
+           BOUTONS
+           ===================================================== */
+
+        .report-footer {
+            margin-top: 15px;
+        }
+
+        .hint {
+            display: block;
+            margin-bottom: 11px;
+            color: #84928e;
+            font-size: 9px;
+        }
+
+        .report-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .preview,
+        .export {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+            height: 44px;
+
+            padding: 0 14px;
+
+            border: 0;
+            border-radius: 9px;
+
+            color: #fff;
+
+            font:
+                800 11px
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            white-space: nowrap;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .preview {
+            background:
+                linear-gradient(
+                    135deg,
+                    #359fe0,
+                    #247fb5
+                );
+        }
+
+        .export {
+            background:
+                linear-gradient(
+                    135deg,
+                    #27aa68,
+                    #168d50
+                );
+        }
+
+        .preview:hover,
+        .export:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+
+        .preview:disabled,
+        .export:disabled {
+            opacity: .58;
+            cursor: default;
+            transform: none;
+        }
+
+        /* =====================================================
+           ERREUR
+           ===================================================== */
+
+        .error {
+            margin-bottom: 20px;
+            padding: 14px 16px;
+
+            border-left:
+                4px solid #dc3545;
+
+            border-radius: 9px;
+
+            background: #fff1f2;
+            color: #922e37;
+
+            font-size: 11px;
+        }
+
+        /* =====================================================
+           PROGRESSION
+           ===================================================== */
+
+        .progress-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 30000;
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            background: rgba(6, 22, 37, .72);
+
+            backdrop-filter: blur(8px);
+        }
+
+        .progress-overlay.visible {
+            display: flex;
+        }
+
+        .progress-modal {
+            width: min(500px, 100%);
+            overflow: hidden;
+            border-radius: 20px;
+            background: #fff;
+
+            box-shadow:
+                0 30px 85px rgba(0, 0, 0, .42);
+        }
+
+        .progress-top {
+            padding: 23px 24px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #173a56,
+                    #102a43
+                );
+
+            color: #fff;
+        }
+
+        .progress-kicker {
+            color: #8fb8d1;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .progress-title {
+            margin-top: 6px;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .progress-device {
+            margin-top: 6px;
+            color: #bdd2de;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .progress-body {
+            padding: 23px 24px;
+        }
+
+        .progress-period {
+            padding: 11px 13px;
+            border: 1px solid #e2e8ec;
+            border-radius: 10px;
+            background: #f8fafb;
+            color: #597080;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .progress-line {
+            height: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #e8eef2;
+        }
+
+        .progress-bar {
+            width: 8%;
+            height: 100%;
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #39a9e7,
+                    #28ad77,
+                    #f0a23a
+                );
+
+            transition: width .45s;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 11px;
+        }
+
+        .progress-message {
+            color: #536b7b;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .progress-percent {
+            color: #214e68;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .progress-foot {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 17px;
+            color: #81909a;
+            font-size: 8px;
+        }
+
+        .progress-foot-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #2bb56e;
+        }
+
+        /* =====================================================
+           TOAST
+           ===================================================== */
+
+        .toast {
+            position: fixed;
+            right: 24px;
+            top: 24px;
+            z-index: 31000;
+
+            display: none;
+
+            max-width: 420px;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            background: #fff;
+            color: #294357;
+
+            box-shadow:
+                0 18px 45px rgba(0, 0, 0, .25);
+
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .toast.visible {
+            display: block;
+        }
+
+        .toast.success {
+            border-left: 4px solid #27ae60;
+        }
+
+        .toast.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media(max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .main {
+                padding: 20px 14px 40px;
+            }
+
+            .header {
+                padding: 22px;
+            }
+
+            .dates,
+            .report-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .auto-sync-status {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .auto-sync-times {
+                align-items: flex-start;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+{% include "sidebar.html" %}
+
+
+<main class="main">
+
+    <div class="page">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <section class="header">
+
+            <h1>Pointages</h1>
+
+            <p>
+                Consultation et export des pointages depuis
+                l'historique local sécurisé.
+            </p>
+
+            <div class="header-meta">
+
+                <span class="meta-pill">
+                    <span class="meta-dot"></span>
+                    Rapports accélérés via SQLite
+                </span>
+
+                <span class="meta-pill">
+                    <span class="meta-dot"></span>
+                    Synchronisation automatique avec les terminaux
+                </span>
+
+            </div>
+
+        </section>
+
+
+        {% if resultat_pointeuses and resultat_pointeuses.success is not true %}
+
+        <div class="error">
+            {{ resultat_pointeuses.erreur }}
+        </div>
+
+        {% endif %}
+
+
+        <!-- =====================================================
+             CARTES POINTEUSES
+             ===================================================== -->
+
+        <div class="grid">
+
+            {% for pointeuse in pointeuses %}
+
+            <section
+                class="card"
+                data-id="{{ pointeuse.id }}"
+                data-name="{{ pointeuse.nom }}"
+            >
+
+                <div class="top">
+
+                    <div>
+
+                        <div class="name">
+                            {{ pointeuse.nom }}
+                        </div>
+
+                        <div class="address">
+                            <span class="dot"></span>
+                            {{ pointeuse.ip }} : {{ pointeuse.port }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================
+                     SYNCHRO AUTOMATIQUE
+                     ============================= -->
+
+                <div
+                    class="auto-sync-status"
+                    id="auto-sync-status-{{ pointeuse.id }}"
+                >
+
+                    <div class="auto-sync-left">
+
+                        <span class="auto-sync-dot"></span>
+
+                        <span
+                            id="auto-sync-label-{{ pointeuse.id }}"
+                        >
+                            Synchronisation automatique active
+                        </span>
+
+                    </div>
+
+
+                    <div class="auto-sync-times">
+
+                        <span>
+                            Dernière :
+                            <strong
+                                id="last-sync-{{ pointeuse.id }}"
+                            >
+                                —
+                            </strong>
+                        </span>
+
+                        <span>
+                            Prochaine :
+                            <strong
+                                id="next-sync-{{ pointeuse.id }}"
+                            >
+                                —
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="sync-info"
+                    id="sync-info-{{ pointeuse.id }}"
+                ></div>
+
+
+                <!-- =================================================
+     RAPPORT
+     ================================================= -->
+
+<form
+    class="report"
+    method="post"
+    action="/pointages/apercu"
+>
+
+    <input
+        type="hidden"
+        name="pointeuse_id"
+        value="{{ pointeuse.id }}"
+    >
+
+    <div class="report-title">
+                        <div>
+                            <strong>
+                                Rapport de pointages
+                            </strong>
+
+                            <small>
+                                APERÇU + EXCEL
+                            </small>
+                        </div>
+
+                        <span class="excel">
+                            X
+                        </span>
+
+                    </div>
+
+
+                    <div class="dates">
+
+                        <div class="field">
+
+                            <label>
+                                Début
+                            </label>
+
+                            <input
+                                class="date-debut"
+                                type="datetime-local"
+                                name="debut"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Fin
+                            </label>
+
+                            <input
+                                class="date-fin"
+                                type="datetime-local"
+                                name="fin"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-footer">
+
+                        <span class="hint">
+                            Choisissez l'aperçu ou téléchargez
+                            directement le fichier Excel.
+                        </span>
+
+
+                        <div class="report-buttons">
+
+                            <button
+                                class="preview"
+                                type="submit"
+                            >
+                                Aperçu du rapport →
+                            </button>
+
+
+                            <button
+                                class="export"
+                                type="button"
+                                data-export
+                            >
+                                ↓ Exporter
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     PROGRESSION
+     ===================================================== -->
+
+<div
+    id="progress-overlay"
+    class="progress-overlay"
+    aria-hidden="true"
+>
+
+    <section class="progress-modal">
+
+        <div class="progress-top">
+
+            <div class="progress-kicker">
+                ZKTeco Manager
+            </div>
+
+            <div
+                id="progress-title"
+                class="progress-title"
+            >
+                Préparation
+            </div>
+
+            <div
+                id="progress-device"
+                class="progress-device"
+            >
+                Pointeuse
+            </div>
+
+        </div>
+
+
+        <div class="progress-body">
+
+            <div
+                id="progress-period"
+                class="progress-period"
+            >
+                —
+            </div>
+
+            <div class="progress-line">
+                <div
+                    id="progress-bar"
+                    class="progress-bar"
+                ></div>
+            </div>
+
+            <div class="progress-row">
+
+                <span
+                    id="progress-message"
+                    class="progress-message"
+                >
+                    Initialisation...
+                </span>
+
+                <span
+                    id="progress-percent"
+                    class="progress-percent"
+                >
+                    8 %
+                </span>
+
+            </div>
+
+            <div class="progress-foot">
+
+                <span class="progress-foot-dot"></span>
+
+                <span>
+                    Historique local sécurisé · aucune suppression automatique
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* =====================================================
+       ELEMENTS
+       ===================================================== */
+
+    const forms = Array.from(
+        document.querySelectorAll('form.report')
+    );
+
+    const cards = Array.from(
+        document.querySelectorAll('.card[data-id]')
+    );
+
+    const overlay =
+        document.getElementById('progress-overlay');
+
+    const pt =
+        document.getElementById('progress-title');
+
+    const pd =
+        document.getElementById('progress-device');
+
+    const pp =
+        document.getElementById('progress-period');
+
+    const pb =
+        document.getElementById('progress-bar');
+
+    const pm =
+        document.getElementById('progress-message');
+
+    const pc =
+        document.getElementById('progress-percent');
+
+    const toast =
+        document.getElementById('toast');
+
+
+    let timers = [];
+
+    let automaticSyncRunning = false;
+
+    let automaticSyncTimer = null;
+
+
+    /*
+     * 5 minutes d'attente ENTRE deux cycles complets.
+     */
+    const AUTO_SYNC_INTERVAL =
+        5 * 60 * 1000;
+
+
+    /*
+     * Petite pause entre deux terminaux.
+     */
+    const DELAY_BETWEEN_DEVICES =
+        800;
+
+
+    /* =====================================================
+       OUTILS DATE / HEURE
+       ===================================================== */
+
+    function pad(n) {
+
+        return String(n).padStart(2, '0');
+
+    }
+
+
+    function formatLocal(d) {
+
+        return (
+            d.getFullYear()
+            + '-'
+            + pad(d.getMonth() + 1)
+            + '-'
+            + pad(d.getDate())
+            + 'T'
+            + pad(d.getHours())
+            + ':'
+            + pad(d.getMinutes())
+        );
+
+    }
+
+
+    function dayKey(d) {
+
+        return (
+            d.getFullYear()
+            + '-'
+            + pad(d.getMonth() + 1)
+            + '-'
+            + pad(d.getDate())
+        );
+
+    }
+
+
+    function formatSyncTime(date) {
+
+        if (!date) {
+            return '—';
+        }
+
+        return (
+            pad(date.getHours())
+            + ':'
+            + pad(date.getMinutes())
+            + ':'
+            + pad(date.getSeconds())
+        );
+
+    }
+
+
+    function displayDate(v) {
+
+        if (!v) {
+            return '—';
+        }
+
+
+        const d =
+            new Date(v);
+
+
+        if (
+            Number.isNaN(
+                d.getTime()
+            )
+        ) {
+
+            return v;
+
+        }
+
+
+        return (
+            pad(d.getDate())
+            + '/'
+            + pad(d.getMonth() + 1)
+            + '/'
+            + d.getFullYear()
+            + ' '
+            + pad(d.getHours())
+            + ':'
+            + pad(d.getMinutes())
+        );
+
+    }
+
+
+    /* =====================================================
+       PERIODE RAPPORT
+       ===================================================== */
+
+    function currentPeriod() {
+
+        const now =
+            new Date();
+
+
+        const fin =
+            new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                0,
+                0,
+                0,
+                0
+            );
+
+
+        const debut =
+            new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() - 1,
+                0,
+                0,
+                0,
+                0
+            );
+
+
+        return {
+
+            debut:
+                formatLocal(debut),
+
+            fin:
+                formatLocal(fin),
+
+            key:
+                dayKey(now)
+
+        };
+
+    }
+
+
+    function setAutomaticPeriod(
+        form,
+        period
+    ) {
+
+        const debut =
+            form.querySelector(
+                'input[name="debut"]'
+            );
+
+
+        const fin =
+            form.querySelector(
+                'input[name="fin"]'
+            );
+
+
+        if (
+            !debut
+            ||
+            !fin
+        ) {
+
+            return;
+
+        }
+
+
+        debut.value =
+            period.debut;
+
+
+        fin.value =
+            period.fin;
+
+
+        form.dataset.autoPeriod =
+            'true';
+
+
+        form.dataset.periodDay =
+            period.key;
+
+    }
+
+
+    const initialPeriod =
+        currentPeriod();
+
+
+    forms.forEach(function (form) {
+
+
+        setAutomaticPeriod(
+            form,
+            initialPeriod
+        );
+
+
+        form.querySelectorAll(
+            'input[type="datetime-local"]'
+        ).forEach(function (input) {
+
+
+            input.addEventListener(
+                'change',
+                function () {
+
+                    form.dataset.autoPeriod =
+                        'false';
+
+                }
+            );
+
+        });
+
+
+        form.addEventListener(
+            'submit',
+            function (e) {
+
+
+                const debut =
+                    form.querySelector(
+                        'input[name="debut"]'
+                    ).value;
+
+
+                const fin =
+                    form.querySelector(
+                        'input[name="fin"]'
+                    ).value;
+
+
+                if (
+                    !validPeriod(
+                        debut,
+                        fin
+                    )
+                ) {
+
+                    e.preventDefault();
+
+
+                    showToast(
+                        'error',
+                        'La période sélectionnée est invalide.'
+                    );
+
+
+                    return;
+
+                }
+
+
+                const card =
+                    form.closest('.card');
+
+
+                openProgress(
+
+                    'Préparation de l’aperçu',
+
+                    card
+                        ? card.dataset.name
+                        : 'Pointeuse',
+
+                    debut,
+
+                    fin,
+
+                    'preview'
+
+                );
+
+            }
+        );
+
+    });
+
+
+    /*
+     * Mise à jour de la période à minuit.
+     */
+
+    setInterval(
+        function () {
+
+
+            const period =
+                currentPeriod();
+
+
+            forms.forEach(
+                function (form) {
+
+
+                    if (
+                        form.dataset.autoPeriod === 'true'
+                        &&
+                        form.dataset.periodDay !== period.key
+                    ) {
+
+                        setAutomaticPeriod(
+                            form,
+                            period
+                        );
+
+                    }
+
+                }
+            );
+
+        },
+        30000
+    );
+
+
+    function validPeriod(
+        debut,
+        fin
+    ) {
+
+        if (
+            !debut
+            ||
+            !fin
+        ) {
+
+            return false;
+
+        }
+
+
+        const d =
+            new Date(debut);
+
+
+        const f =
+            new Date(fin);
+
+
+        return (
+
+            !Number.isNaN(
+                d.getTime()
+            )
+
+            &&
+
+            !Number.isNaN(
+                f.getTime()
+            )
+
+            &&
+
+            d <= f
+
+        );
+
+    }
+
+
+    /* =====================================================
+       PROGRESSION
+       ===================================================== */
+
+    function clearTimers() {
+
+        timers.forEach(
+            clearTimeout
+        );
+
+        timers = [];
+
+    }
+
+
+    function setP(
+        n,
+        msg
+    ) {
+
+        pb.style.width =
+            n + '%';
+
+
+        pc.textContent =
+            n + ' %';
+
+
+        pm.textContent =
+            msg;
+
+    }
+
+
+    function openProgress(
+        title,
+        name,
+        debut,
+        fin,
+        type
+    ) {
+
+        clearTimers();
+
+
+        pt.textContent =
+            title;
+
+
+        pd.textContent =
+            name;
+
+
+        pp.textContent =
+
+            displayDate(debut)
+            +
+            ' → '
+            +
+            displayDate(fin);
+
+
+        setP(
+            8,
+            'Initialisation...'
+        );
+
+
+        overlay.classList.add(
+            'visible'
+        );
+
+
+        overlay.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+
+
+        const steps =
+
+            type === 'export'
+
+            ? [
+
+                [
+                    100,
+                    30,
+                    'Lecture de l’historique local...'
+                ],
+
+                [
+                    350,
+                    58,
+                    'Préparation des pointages...'
+                ],
+
+                [
+                    700,
+                    84,
+                    'Création du fichier Excel...'
+                ],
+
+                [
+                    1100,
+                    94,
+                    'Finalisation...'
+                ]
+
+            ]
+
+            : [
+
+                [
+                    100,
+                    35,
+                    'Lecture de l’historique local...'
+                ],
+
+                [
+                    300,
+                    68,
+                    'Préparation du rapport...'
+                ],
+
+                [
+                    650,
+                    92,
+                    'Construction de l’aperçu...'
+                ]
+
+            ];
+
+
+        steps.forEach(
+            function (s) {
+
+
+                timers.push(
+
+                    setTimeout(
+                        function () {
+
+                            setP(
+                                s[1],
+                                s[2]
+                            );
+
+                        },
+                        s[0]
+                    )
+
+                );
+
+            }
+        );
+
+    }
+
+
+    function closeProgress() {
+
+        clearTimers();
+
+
+        overlay.classList.remove(
+            'visible'
+        );
+
+
+        overlay.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+
+    }
+
+
+    /* =====================================================
+       TOAST
+       ===================================================== */
+
+    function showToast(
+        type,
+        text
+    ) {
+
+        toast.className =
+            'toast '
+            + type
+            + ' visible';
+
+
+        toast.textContent =
+            text;
+
+
+        setTimeout(
+            function () {
+
+                toast.classList.remove(
+                    'visible'
+                );
+
+            },
+            5000
+        );
+
+    }
+
+
+    /* =====================================================
+       LECTURE JSON
+       ===================================================== */
+
+    async function readJson(
+        response
+    ) {
+
+        const text =
+            await response.text();
+
+
+        let data;
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        }
+        catch (e) {
+
+            throw new Error(
+                'Erreur interne du serveur (HTTP '
+                + response.status
+                + ').'
+            );
+
+        }
+
+
+        if (
+            !response.ok
+            ||
+            data.success !== true
+        ) {
+
+            throw new Error(
+                data.erreur
+                ||
+                'Opération impossible.'
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    /* =====================================================
+       AFFICHAGE SYNCHRO
+       ===================================================== */
+
+    function setSyncRunning(
+        card
+    ) {
+
+        const id =
+            card.dataset.id;
+
+
+        const status =
+            document.getElementById(
+                'auto-sync-status-' + id
+            );
+
+
+        const label =
+            document.getElementById(
+                'auto-sync-label-' + id
+            );
+
+
+        if (status) {
+
+            status.classList.remove(
+                'failed'
+            );
+
+
+            status.classList.add(
+                'running'
+            );
+
+        }
+
+
+        if (label) {
+
+            label.textContent =
+                'Synchronisation en cours...';
+
+        }
+
+    }
+
+
+    function setSyncSuccess(
+        card
+    ) {
+
+        const id =
+            card.dataset.id;
+
+
+        const status =
+            document.getElementById(
+                'auto-sync-status-' + id
+            );
+
+
+        const label =
+            document.getElementById(
+                'auto-sync-label-' + id
+            );
+
+
+        const last =
+            document.getElementById(
+                'last-sync-' + id
+            );
+
+
+        const now =
+            new Date();
+
+
+        if (status) {
+
+            status.classList.remove(
+                'running',
+                'failed'
+            );
+
+        }
+
+
+        if (label) {
+
+            label.textContent =
+                'Synchronisation automatique active';
+
+        }
+
+
+        if (last) {
+
+            last.textContent =
+                formatSyncTime(now);
+
+        }
+
+    }
+
+
+    function setSyncFailed(
+        card
+    ) {
+
+        const id =
+            card.dataset.id;
+
+
+        const status =
+            document.getElementById(
+                'auto-sync-status-' + id
+            );
+
+
+        const label =
+            document.getElementById(
+                'auto-sync-label-' + id
+            );
+
+
+        const last =
+            document.getElementById(
+                'last-sync-' + id
+            );
+
+
+        const now =
+            new Date();
+
+
+        if (status) {
+
+            status.classList.remove(
+                'running'
+            );
+
+
+            status.classList.add(
+                'failed'
+            );
+
+        }
+
+
+        if (label) {
+
+            label.textContent =
+                'Dernière synchronisation échouée';
+
+        }
+
+
+        if (last) {
+
+            last.textContent =
+                formatSyncTime(now);
+
+        }
+
+    }
+
+
+    /*
+     * Heure commune du prochain cycle
+     * pour TOUTES les pointeuses.
+     */
+
+    function setNextSyncForAll(
+        nextDate
+    ) {
+
+        cards.forEach(
+            function (card) {
+
+
+                const id =
+                    card.dataset.id;
+
+
+                const next =
+                    document.getElementById(
+                        'next-sync-' + id
+                    );
+
+
+                if (next) {
+
+                    next.textContent =
+                        formatSyncTime(
+                            nextDate
+                        );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SYNCHRONISATION D'UNE POINTEUSE
+       ===================================================== */
+
+    async function syncTerminalAutomatic(
+        card
+    ) {
+
+        const id =
+            card.dataset.id;
+
+
+        const name =
+            card.dataset.name
+            ||
+            'Pointeuse';
+
+
+        const info =
+            document.getElementById(
+                'sync-info-' + id
+            );
+
+
+        setSyncRunning(
+            card
+        );
+
+
+        try {
+
+
+            const response =
+                await fetch(
+
+                    '/api/pointeuses/'
+                    +
+                    encodeURIComponent(id)
+                    +
+                    '/synchroniser-pointages',
+
+                    {
+
+                        method:
+                            'POST',
+
+                        cache:
+                            'no-store'
+
+                    }
+
+                );
+
+
+            const data =
+                await readJson(
+                    response
+                );
+
+
+            if (info) {
+
+
+                info.classList.remove(
+                    'sync-error'
+                );
+
+
+                info.classList.add(
+                    'visible'
+                );
+
+
+                const nouveaux =
+                    Number(
+                        data.nombre_nouveaux || 0
+                    ).toLocaleString(
+                        'fr-FR'
+                    );
+
+
+                const total =
+                    Number(
+                        data.nombre_total || 0
+                    ).toLocaleString(
+                        'fr-FR'
+                    );
+
+
+                info.textContent =
+
+                    nouveaux
+
+                    +
+
+                    ' nouveau(x) pointage(s) récupéré(s) · '
+
+                    +
+
+                    total
+
+                    +
+
+                    ' au total dans SQLite.';
+
+            }
+
+
+            setSyncSuccess(
+                card
+            );
+
+
+            console.log(
+                '[SYNC AUTO] '
+                + name
+                + ' : synchronisation terminée.'
+            );
+
+
+            return true;
+
+        }
+        catch (e) {
+
+
+            setSyncFailed(
+                card
+            );
+
+
+            console.error(
+                '[SYNC AUTO] Erreur '
+                + name
+                + ' :',
+                e
+            );
+
+
+            if (info) {
+
+
+                info.classList.add(
+                    'visible',
+                    'sync-error'
+                );
+
+
+                info.textContent =
+
+                    'Synchronisation automatique impossible · '
+
+                    +
+
+                    (
+                        e.message
+                        ||
+                        'connexion impossible'
+                    );
+
+            }
+
+
+            return false;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PAUSE
+       ===================================================== */
+
+    function wait(ms) {
+
+        return new Promise(
+            function (resolve) {
+
+                setTimeout(
+                    resolve,
+                    ms
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CYCLE COMPLET
+       ===================================================== */
+
+    async function runAutomaticSync() {
+
+
+        if (
+            automaticSyncRunning
+        ) {
+
+            return;
+
+        }
+
+
+        automaticSyncRunning =
+            true;
+
+
+        /*
+         * Annule une éventuelle ancienne programmation.
+         */
+        if (
+            automaticSyncTimer !== null
+        ) {
+
+            clearTimeout(
+                automaticSyncTimer
+            );
+
+
+            automaticSyncTimer =
+                null;
+
+        }
+
+
+        console.log(
+            '[SYNC AUTO] Début du cycle automatique.'
+        );
+
+
+        try {
+
+
+            /*
+             * Synchronisation séquentielle :
+             * une pointeuse après l'autre.
+             */
+
+            for (
+                let i = 0;
+                i < cards.length;
+                i++
+            ) {
+
+
+                await syncTerminalAutomatic(
+                    cards[i]
+                );
+
+
+                if (
+                    i < cards.length - 1
+                ) {
+
+                    await wait(
+                        DELAY_BETWEEN_DEVICES
+                    );
+
+                }
+
+            }
+
+        }
+        catch (e) {
+
+
+            console.error(
+                '[SYNC AUTO] Erreur générale du cycle :',
+                e
+            );
+
+        }
+        finally {
+
+
+            automaticSyncRunning =
+                false;
+
+
+            /*
+             * L'heure est calculée UNE SEULE FOIS,
+             * lorsque toutes les pointeuses ont été traitées.
+             */
+
+            const cycleFinishedAt =
+                new Date();
+
+
+            const nextCycle =
+                new Date(
+                    cycleFinishedAt.getTime()
+                    +
+                    AUTO_SYNC_INTERVAL
+                );
+
+
+            /*
+             * Même heure affichée sur toutes les cartes.
+             */
+
+            setNextSyncForAll(
+                nextCycle
+            );
+
+
+            console.log(
+                '[SYNC AUTO] Cycle terminé. Prochain cycle à '
+                +
+                formatSyncTime(
+                    nextCycle
+                )
+            );
+
+
+            /*
+             * IMPORTANT :
+             * on attend 5 minutes APRES la fin réelle
+             * du cycle précédent.
+             *
+             * Cela empêche le chevauchement des cycles.
+             */
+
+            automaticSyncTimer =
+                setTimeout(
+                    function () {
+
+
+                        automaticSyncTimer =
+                            null;
+
+
+                        runAutomaticSync();
+
+                    },
+                    AUTO_SYNC_INTERVAL
+                );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       DEMARRAGE AUTOMATIQUE
+       ===================================================== */
+
+    if (
+        cards.length > 0
+    ) {
+
+
+        /*
+         * Premier cycle une seconde après
+         * l'ouverture de la page.
+         */
+
+        automaticSyncTimer =
+            setTimeout(
+                function () {
+
+
+                    automaticSyncTimer =
+                        null;
+
+
+                    runAutomaticSync();
+
+                },
+                1000
+            );
+
+    }
+
+
+    /* =====================================================
+       EXPORT EXCEL
+       ===================================================== */
+
+    document.querySelectorAll(
+        'button[data-export]'
+    ).forEach(
+        function (button) {
+
+
+            button.addEventListener(
+                'click',
+                async function () {
+
+
+                    const form =
+                        button.closest(
+                            'form.report'
+                        );
+
+
+                    if (!form) {
+
+
+                        showToast(
+                            'error',
+                            'Formulaire de rapport introuvable.'
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    const debutInput =
+                        form.querySelector(
+                            'input[name="debut"]'
+                        );
+
+
+                    const finInput =
+                        form.querySelector(
+                            'input[name="fin"]'
+                        );
+
+
+                    const idInput =
+                        form.querySelector(
+                            'input[name="pointeuse_id"]'
+                        );
+
+
+                    const debut =
+                        debutInput
+                            ? debutInput.value
+                            : '';
+
+
+                    const fin =
+                        finInput
+                            ? finInput.value
+                            : '';
+
+
+                    const id =
+                        idInput
+                            ? idInput.value
+                            : '';
+
+
+                    if (
+                        !id
+                        ||
+                        !validPeriod(
+                            debut,
+                            fin
+                        )
+                    ) {
+
+
+                        showToast(
+                            'error',
+                            'La période sélectionnée est invalide.'
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    const card =
+                        form.closest(
+                            '.card'
+                        );
+
+
+                    openProgress(
+
+                        'Génération du rapport Excel',
+
+                        card
+                            ? card.dataset.name
+                            : 'Pointeuse',
+
+                        debut,
+
+                        fin,
+
+                        'export'
+
+                    );
+
+
+                    button.disabled =
+                        true;
+
+
+                    try {
+
+
+                        const body =
+                            new URLSearchParams();
+
+
+                        body.set(
+                            'pointeuse_id',
+                            id
+                        );
+
+
+                        body.set(
+                            'debut',
+                            debut
+                        );
+
+
+                        body.set(
+                            'fin',
+                            fin
+                        );
+
+
+                        const response =
+                            await fetch(
+
+                                '/pointages/telecharger',
+
+                                {
+
+                                    method:
+                                        'POST',
+
+                                    headers: {
+
+                                        'Content-Type':
+                                            'application/x-www-form-urlencoded;charset=UTF-8'
+
+                                    },
+
+                                    body:
+                                        body.toString(),
+
+                                    cache:
+                                        'no-store'
+
+                                }
+
+                            );
+
+
+                        if (
+                            !response.ok
+                        ) {
+
+
+                            const text =
+                                await response.text();
+
+
+                            let message =
+                                'Export impossible.';
+
+
+                            try {
+
+
+                                const data =
+                                    JSON.parse(
+                                        text
+                                    );
+
+
+                                message =
+                                    data.erreur
+                                    ||
+                                    message;
+
+                            }
+                            catch (e) {
+
+                                /* Réponse non JSON */
+
+                            }
+
+
+                            throw new Error(
+                                message
+                            );
+
+                        }
+
+
+                        const blob =
+                            await response.blob();
+
+
+                        if (
+                            !blob
+                            ||
+                            blob.size === 0
+                        ) {
+
+
+                            throw new Error(
+                                'Le fichier Excel généré est vide.'
+                            );
+
+                        }
+
+
+                        const disposition =
+                            response.headers.get(
+                                'Content-Disposition'
+                            )
+                            ||
+                            '';
+
+
+                        const match =
+                            disposition.match(
+                                /filename="?([^";]+)"?/i
+                            );
+
+
+                        const filename =
+                            match
+                                ? match[1]
+                                : 'pointages.xlsx';
+
+
+                        setP(
+                            100,
+                            'Fichier prêt. Téléchargement...'
+                        );
+
+
+                        const url =
+                            URL.createObjectURL(
+                                blob
+                            );
+
+
+                        const a =
+                            document.createElement(
+                                'a'
+                            );
+
+
+                        a.href =
+                            url;
+
+
+                        a.download =
+                            filename;
+
+
+                        a.style.display =
+                            'none';
+
+
+                        document.body.appendChild(
+                            a
+                        );
+
+
+                        a.click();
+
+
+                        a.remove();
+
+
+                        setTimeout(
+                            function () {
+
+                                URL.revokeObjectURL(
+                                    url
+                                );
+
+                            },
+                            1500
+                        );
+
+
+                        setTimeout(
+                            closeProgress,
+                            700
+                        );
+
+                    }
+                    catch (e) {
+
+
+                        closeProgress();
+
+
+                        showToast(
+                            'error',
+                            e.message
+                            ||
+                            'Export impossible.'
+                        );
+
+                    }
+                    finally {
+
+
+                        button.disabled =
+                            false;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       RETOUR SUR LA PAGE
+       ===================================================== */
+
+    window.addEventListener(
+        'pageshow',
+        closeProgress
+    );
+
+
+});
+
+</script>
+
+</body>
+</html>

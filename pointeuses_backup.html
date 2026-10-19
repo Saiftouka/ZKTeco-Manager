@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZKTeco Manager - Pointeuses</title>
+
+        rel="stylesheet"
+    href="/static/css/navigation.css"
+    
+    <!-- MENU PARTAGÉ -->
+    /static/css/navigation.css
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333333;
+            background-color: #10263f;
+            background-image: url("/static/images/Versigent-Desktop-B-3840x2160.png");
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* ==========================================
+           MENU LATERAL
+        ========================================== */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background-color: #182433;
+            color: #ffffff;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 25px 20px;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #2c3b4d;
+        }
+
+        .menu-button {
+            display: block;
+            width: 100%;
+            padding: 16px 25px;
+            border: 0;
+            border-left: 4px solid transparent;
+            background-color: transparent;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .menu-button:hover {
+            background-color: #223348;
+        }
+
+        .menu-button.active {
+            background-color: #223348;
+            border-left-color: #e58a26;
+        }
+
+        /* ==========================================
+           CONTENU
+        ========================================== */
+
+        .main {
+            min-height: 100vh;
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        /* ==========================================
+           ENTETE
+        ========================================== */
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px 24px;
+            background-color: rgba(16, 38, 63, 0.76);
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #e7edf4;
+        }
+
+        /* ==========================================
+           BOUTON AJOUTER
+        ========================================== */
+
+        .btn-primary {
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        /* ==========================================
+           GRILLE
+        ========================================== */
+
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        /* ==========================================
+           CARTE POINTEUSE
+        ========================================== */
+
+        .device-card {
+            padding: 24px;
+            background-color: rgba(255, 255, 255, 0.94);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.20);
+            cursor: context-menu;
+        }
+
+        .device-card:hover {
+            border-color: #e58a26;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
+        }
+
+        .device-card.selected {
+            border-color: #e58a26;
+        }
+
+        .device-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .device-name {
+            color: #182433;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           INFORMATIONS
+        ========================================== */
+
+        .device-info {
+            margin-bottom: 20px;
+        }
+
+        .device-info p {
+            margin-top: 10px;
+        }
+
+        .label {
+            color: #777777;
+        }
+
+        /* ==========================================
+           STATUT
+        ========================================== */
+
+        .status {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background-color: #e9ecef;
+            color: #555555;
+        }
+
+        /* ==========================================
+           PIED CARTE
+        ========================================== */
+
+        .device-actions {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .context-help {
+            color: #777777;
+            font-size: 12px;
+        }
+
+        /* ==========================================
+           MENU CONTEXTUEL
+        ========================================== */
+
+        .context-menu {
+            position: fixed;
+            z-index: 9999;
+            display: none;
+            width: 240px;
+            padding: 6px 0;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .context-menu.visible {
+            display: block;
+        }
+
+        .context-header {
+            padding: 11px 15px;
+            border-bottom: 1px solid #eeeeee;
+            color: #777777;
+            font-size: 12px;
+        }
+
+        .context-device-name {
+            display: block;
+            margin-top: 5px;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .context-device-ip {
+            display: block;
+            margin-top: 4px;
+            color: #777777;
+            font-size: 12px;
+        }
+
+        .context-item {
+            display: block;
+            width: 100%;
+            padding: 13px 15px;
+            border: 0;
+            background-color: #ffffff;
+            color: #333333;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .context-item:hover {
+            background-color: #f2f6fa;
+        }
+
+        .context-important {
+            color: #2471a3;
+            font-weight: bold;
+        }
+
+        .separator {
+            height: 1px;
+            margin: 4px 0;
+            background-color: #eeeeee;
+        }
+
+        /* ==========================================
+           MESSAGES
+        ========================================== */
+
+        .error-box {
+            margin-bottom: 25px;
+            padding: 18px;
+            background-color: rgba(248, 215, 218, 0.96);
+            color: #721c24;
+            border-left: 5px solid #dc3545;
+            border-radius: 6px;
+        }
+
+        .empty-box {
+            padding: 35px;
+            background-color: rgba(255, 255, 255, 0.94);
+            color: #777777;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 1000px) {
+            .devices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                padding: 25px;
+            }
+
+            .header {
+                display: block;
+            }
+
+            .btn-primary {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==========================================
+         MENU
+    ========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            ZKTeco Manager
+        </div>
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="window.location.href='/'">
+            Dashboard
+        </button>
+
+        <button
+            class="menu-button active"
+            type="button"
+            onclick="window.location.href='/pointeuses'">
+            Pointeuses
+        </button>
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="window.location.href='/pointages'">
+            Pointages
+        </button>
+
+      <button
+    class="menu-button"
+    type="button"
+    onclick="window.location.href='/parametres'">
+    Paramètres
+</button>
+
+    </aside>
+
+    <!-- ==========================================
+         CONTENU
+    ========================================== -->
+
+    <main class="main">
+
+        <div class="header">
+
+            <div>
+                <h1>Pointeuses</h1>
+
+                <p>
+                    Gestion des pointeuses ZKTeco configurées
+                </p>
+            </div>
+
+            <button
+                class="btn-primary"
+                type="button"
+                onclick="window.location.href='/pointeuses/ajouter'">
+                + Ajouter une pointeuse
+            </button>
+
+        </div>
+
+        <!-- ERREUR -->
+
+        {% if not resultat.success %}
+
+        <div class="error-box">
+            <strong>
+                Impossible de charger les pointeuses.
+            </strong>
+
+            <br><br>
+
+            {{ resultat.erreur }}
+        </div>
+
+        {% endif %}
+
+        <!-- POINTEUSES -->
+
+        {% if pointeuses %}
+
+        <div class="devices-grid">
+
+            {% for pointeuse in pointeuses %}
+
+            <div
+                class="device-card"
+                data-id="{{ pointeuse.id }}"
+                data-nom="{{ pointeuse.nom }}"
+                data-ip="{{ pointeuse.ip }}"
+                data-port="{{ pointeuse.port }}">
+
+                <div class="device-header">
+
+                    <div class="device-name">
+                        {{ pointeuse.nom }}
+                    </div>
+
+                    {% if pointeuse.active %}
+
+                    <span class="status status-active">
+                        ACTIVE
+                    </span>
+
+                    {% else %}
+
+                    <span class="status status-inactive">
+                        INACTIVE
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="device-info">
+
+                    <p>
+                        <span class="label">
+                            Adresse IP :
+                        </span>
+
+                        <strong>
+                            {{ pointeuse.ip }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        <span class="label">
+                            Port :
+                        </span>
+
+                        <strong>
+                            {{ pointeuse.port }}
+                        </strong>
+                    </p>
+
+                </div>
+
+                <div class="device-actions">
+                    <span class="context-help">
+                        Clic droit pour afficher les actions
+                    </span>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+            Aucune pointeuse configurée.
+        </div>
+
+        {% endif %}
+
+    </main>
+
+    <!-- ==========================================
+         MENU CLIC DROIT
+    ========================================== -->
+
+    <div
+        id="context-menu"
+        class="context-menu">
+
+        <div class="context-header">
+
+            Pointeuse sélectionnée
+
+            <span
+                id="context-name"
+                class="context-device-name">
+            </span>
+
+            <span
+                id="context-ip"
+                class="context-device-ip">
+            </span>
+
+        </div>
+
+        <button
+            id="context-employes"
+            class="context-item context-important"
+            type="button">
+            Voir les employés
+        </button>
+
+        <div class="separator"></div>
+
+        <button
+            id="context-modifier"
+            class="context-item"
+            type="button">
+            Modifier
+        </button>
+
+        <div class="separator"></div>
+
+        <button
+            id="context-import"
+            class="context-item context-important"
+            type="button">
+            Import Excel
+        </button>
+
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const menu =
+                    document.getElementById("context-menu");
+
+                const nameElement =
+                    document.getElementById("context-name");
+
+                const ipElement =
+                    document.getElementById("context-ip");
+
+                const employeesButton =
+                    document.getElementById("context-employes");
+
+                const modifierButton =
+                    document.getElementById("context-modifier");
+
+                const importButton =
+                    document.getElementById("context-import");
+
+                const cards =
+                    document.querySelectorAll(".device-card");
+
+                let selected = null;
+
+
+                function fermerMenu() {
+
+                    menu.classList.remove("visible");
+
+                    cards.forEach(
+                        function (card) {
+                            card.classList.remove("selected");
+                        }
+                    );
+
+                }
+
+
+                cards.forEach(
+                    function (card) {
+
+                        card.addEventListener(
+                            "contextmenu",
+                            function (event) {
+
+                                event.preventDefault();
+
+                                fermerMenu();
+
+                                selected = {
+                                    id: card.dataset.id,
+                                    nom: card.dataset.nom,
+                                    ip: card.dataset.ip,
+                                    port: card.dataset.port
+                                };
+
+                                nameElement.textContent =
+                                    selected.nom;
+
+                                ipElement.textContent =
+                                    selected.ip
+                                    + ":"
+                                    + selected.port;
+
+                                card.classList.add("selected");
+
+                                let x = event.clientX;
+                                let y = event.clientY;
+
+                                if (
+                                    x + 240
+                                    > window.innerWidth
+                                ) {
+                                    x =
+                                        window.innerWidth
+                                        - 250;
+                                }
+
+                                if (
+                                    y + 200
+                                    > window.innerHeight
+                                ) {
+                                    y =
+                                        window.innerHeight
+                                        - 210;
+                                }
+
+                                menu.style.left =
+                                    x + "px";
+
+                                menu.style.top =
+                                    y + "px";
+
+                                menu.classList.add("visible");
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                employeesButton.addEventListener(
+                    "click",
+                    function () {
+
+                        if (!selected) {
+                            return;
+                        }
+
+                        window.location.href =
+                            "/employes?pointeuse_id="
+                            + encodeURIComponent(
+                                selected.id
+                            );
+
+                    }
+                );
+
+
+                modifierButton.addEventListener(
+                    "click",
+                    function () {
+
+                        if (!selected) {
+                            return;
+                        }
+
+                        window.location.href =
+                            "/pointeuses/"
+                            + encodeURIComponent(
+                                selected.id
+                            )
+                            + "/modifier";
+
+                    }
+                );
+
+
+                importButton.addEventListener(
+                    "click",
+                    function () {
+
+                        if (!selected) {
+                            return;
+                        }
+
+                        window.location.href =
+                            "/import-excel?pointeuse_id="
+                            + encodeURIComponent(
+                                selected.id
+                            );
+
+                    }
+                );
+
+
+                document.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            !menu.contains(event.target)
+                        ) {
+                            fermerMenu();
+                        }
+
+                    }
+                );
+
+
+                document.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (event.key === "Escape") {
+                            fermerMenu();
+                        }
+
+                    }
+                );
+
+
+                window.addEventListener(
+                    "resize",
+                    fermerMenu
+                );
+
+
+                window.addEventListener(
+                    "scroll",
+                    fermerMenu
+                );
+
+            }
+        );
+    </script>
+
+</body>
+
+</html>

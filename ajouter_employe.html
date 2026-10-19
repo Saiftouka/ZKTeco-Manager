@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZKTeco Manager - Ajouter employe</title>
+<link rel="stylesheet" href="/static/css/navigation.css">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;color:#253747;background:#10263f url('/static/images/Versigent-Desktop-B-3840x2160.png') center/cover fixed no-repeat}.main{min-height:100vh;padding:34px 38px 60px}.container{max-width:850px;margin:auto}.device,.card{background:rgba(255,255,255,.97);box-shadow:0 15px 36px rgba(3,20,36,.23);border-radius:17px}.device{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px;padding:21px 24px;border-top:4px solid #f28c18}.device-name{font-size:19px;font-weight:700;color:#17324a}.device-sub{margin-top:5px;color:#71808e;font-size:11px}.state{padding:6px 10px;border-radius:14px;background:#eaf8ef;color:#14813b;font-size:9px;font-weight:700}.card{padding:28px 30px}.title{font-size:21px;font-weight:700;color:#17334a}.subtitle{margin:6px 0 25px;color:#7c8d99;font-size:11px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 18px}.group.full{grid-column:1/-1}label{display:block;margin-bottom:7px;color:#344c5e;font-size:11px;font-weight:700}.req{color:#dc3545}input,select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #d2dce4;border-radius:9px;background:#fff;color:#263b4c;font:13px Arial;outline:none}.help{display:block;margin-top:6px;color:#8b98a2;font-size:9px}.message{margin-bottom:22px;padding:14px 16px;border-radius:10px;font-size:11px;line-height:1.6}.ok{border-left:4px solid #27ae60;background:#effaf4;color:#17663a}.bad{border-left:4px solid #dc3545;background:#fff1f2;color:#9c2e38}.message ul{margin:7px 0 0;padding-left:19px}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:27px;padding-top:20px;border-top:1px solid #e8edf1}.btn{min-height:43px;padding:10px 18px;border:0;border-radius:9px;font:700 11px Arial;cursor:pointer}.back{background:#eef1f3;color:#405363}.save{min-width:180px;background:linear-gradient(135deg,#39ad6a,#21884c);color:#fff}@media(max-width:700px){.main{padding:20px 14px 40px}.device{align-items:flex-start;flex-direction:column}.card{padding:23px 19px}.grid{grid-template-columns:1fr}.group.full{grid-column:auto}.actions{flex-direction:column-reverse}.btn{width:100%}}
+</style>
+</head>
+<body>
+{% include "sidebar.html" %}
+<main class="main"><div class="container">
+<div class="device"><div><div class="device-name">{{ pointeuse.nom }}</div><div class="device-sub">{{ pointeuse.ip }} &bull; Port {{ pointeuse.port }}</div></div>{% if pointeuse.active %}<div class="state">ACTIVE</div>{% endif %}</div>
+{% if resultat %}{% if resultat.success %}<div class="message ok"><strong>Employe ajoute avec succes.</strong><br>{{ resultat.nom or '' }}{% if resultat.matricule %} &bull; Matricule {{ resultat.matricule }}{% endif %}</div>{% else %}<div class="message bad"><strong>Impossible d'ajouter l'employe.</strong>{% if resultat.erreurs %}<ul>{% for erreur in resultat.erreurs %}<li>{{ erreur }}</li>{% endfor %}</ul>{% elif resultat.erreur %}<br>{{ resultat.erreur }}{% endif %}</div>{% endif %}{% endif %}
+<div class="card"><div class="title">Ajouter un employe</div><div class="subtitle">Le matricule et le badge sont verifies par rapport aux utilisateurs deja presents dans cette pointeuse.</div>
+<form id="addEmployeeForm" method="post" action="/employes/ajouter">
+<input type="hidden" name="pointeuse_id" value="{{ pointeuse.id }}">
+<div class="grid">
+<div class="group"><label for="matricule">Matricule <span class="req">*</span></label><input id="matricule" name="matricule" type="text" value="{{ form_data.matricule or '' }}" required autocomplete="off"><span class="help">Le matricule doit etre unique.</span></div>
+<div class="group"><label for="badge">Numero de badge / carte <span class="req">*</span></label><input id="badge" name="badge" type="text" inputmode="numeric" value="{{ form_data.badge or '' }}" required autocomplete="off"><span class="help">Le badge doit etre unique.</span></div>
+<div class="group full"><label for="nom">Nom &amp; Prenom <span class="req">*</span></label><input id="nom" name="nom" type="text" value="{{ form_data.nom or '' }}" required autocomplete="off"></div>
+<div class="group full"><label for="role">Statut utilisateur <span class="req">*</span></label><select id="role" name="role" required><option value="Utilisateur normal" {% if form_data.role != 'Admin' %}selected{% endif %}>Utilisateur normal</option><option value="Admin" {% if form_data.role == 'Admin' %}selected{% endif %}>Admin</option></select></div>
+</div>
+<div class="actions"><button type="button" id="backButton" class="btn back">Retour aux employes</button><button type="submit" id="saveButton" class="btn save">Ajouter l'employe</button></div>
+</form></div>
+</div></main>
+<script>
+document.addEventListener('DOMContentLoaded',function(){const form=document.getElementById('addEmployeeForm'),save=document.getElementById('saveButton'),back=document.getElementById('backButton'),badge=document.getElementById('badge');if(badge){badge.addEventListener('input',function(){badge.value=badge.value.replace(/[^0-9]/g,'');});}if(back){back.addEventListener('click',function(){window.location.href='/employes?pointeuse_id='+encodeURIComponent('{{ pointeuse.id }}');});}if(form&&save){form.addEventListener('submit',function(){save.disabled=true;save.textContent='Ajout en cours...';});}});
+</script>
+</body>
+</html>

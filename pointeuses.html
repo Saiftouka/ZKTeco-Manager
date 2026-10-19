@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZKTeco Manager - Pointeuses</title>
+<link rel="stylesheet" href="/static/css/navigation.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%}body{min-height:100vh;font-family:Arial,sans-serif;color:#333;background:#10263f url('/static/images/Versigent-Desktop-B-3840x2160.png') center/cover fixed no-repeat}.main{min-height:100vh;padding:34px 38px 60px}.page-container{width:100%;max-width:1280px;margin:auto}.header{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-bottom:32px;padding:24px 27px;background:rgba(22,50,79,.91);border:1px solid rgba(255,255,255,.05);border-radius:15px;box-shadow:0 10px 28px rgba(0,0,0,.16)}.header h1{margin-bottom:8px;color:#fff;font-size:32px}.header p{color:#e7edf4;font-size:15px}.header-stats{display:flex;gap:9px;margin-top:15px;color:rgba(255,255,255,.78);font-size:12px;font-weight:600}.header-stat{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid rgba(255,255,255,.11);border-radius:20px;background:rgba(255,255,255,.06)}.header-stat-dot{width:7px;height:7px;border-radius:50%;background:#62d38b}.btn-primary{display:inline-flex;align-items:center;gap:8px;min-height:47px;padding:12px 19px;border:0;border-radius:9px;background:linear-gradient(135deg,#43a9e7,#2389c8);color:#fff;font:700 14px Arial;cursor:pointer}.devices-wrapper{max-width:1180px;margin:0 auto 60px}.devices-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}.device-card{position:relative;min-height:286px;padding:23px 23px 18px;overflow:hidden;background:rgba(255,255,255,.95);border:2px solid rgba(255,255,255,.54);border-radius:18px;box-shadow:0 13px 32px rgba(3,20,36,.22);transition:.22s}.device-card:before{content:"";position:absolute;top:0;left:24px;right:24px;height:3px;background:linear-gradient(90deg,#299bde,#64bdec)}.device-card:hover,.device-card.selected{border-color:#f28c18;transform:translateY(-4px);box-shadow:0 18px 42px rgba(3,20,36,.29)}.device-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:18px}.device-icon{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#55b7ec,#2588c3);color:#fff;box-shadow:0 8px 20px rgba(41,151,219,.28)}.terminal-symbol{position:relative;width:27px;height:31px;border:2px solid rgba(255,255,255,.94);border-radius:5px}.terminal-symbol:before{content:"";position:absolute;top:5px;left:5px;right:5px;height:8px;border-radius:2px;background:rgba(255,255,255,.82)}.terminal-symbol:after{content:"";position:absolute;bottom:5px;left:6px;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:7px 0 0 rgba(255,255,255,.75),14px 0 0 rgba(255,255,255,.52)}.status{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:18px;font-size:11px;font-weight:700}.status-dot{width:7px;height:7px;border-radius:50%}.status-active{background:#ddf4e5;color:#116b35}.status-active .status-dot{background:#22a855}.status-inactive{background:#edf0f2;color:#626b73}.status-inactive .status-dot{background:#8c969e}.device-identity{position:relative;z-index:1;margin-bottom:20px}.device-name{margin-bottom:5px;color:#152c40;font-size:21px;font-weight:700}.device-type{color:#8a96a1;font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase}.device-info{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:14px 18px;padding:16px 0;border-top:1px solid #e7ebee;border-bottom:1px solid #e7ebee}.info-label{display:block;margin-bottom:5px;color:#8a96a1;font-size:10px;font-weight:700;text-transform:uppercase}.info-value{display:block;color:#182f43;font-size:14px;font-weight:700}.port-info{text-align:right} .pointages-info{
+    grid-column:1 / -1;
+    margin-top:8px;
+    padding-top:12px;
+    border-top:1px dashed #dce5eb;
+    text-align:center;
+}
+
+.pointages-label{
+    display:block;
+    color:#8a96a1;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+}
+
+.pointages-value{
+    display:block;
+    margin-top:6px;
+    color:#2389c8;
+    font-size:22px;
+    font-weight:800;
+}
+.device-actions{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px}.device-ready{color:#8a96a1;font-size:11px}.device-buttons{display:flex;align-items:center;gap:7px}.action-trigger,.property-trigger{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:6px 10px;border:1px solid #dfe6eb;border-radius:9px;background:rgba(247,250,252,.95);color:#667684;font:700 11px Arial;cursor:pointer}.property-trigger{border-color:rgba(52,152,219,.24);background:#eef8fd;color:#287fae}.property-trigger:hover{background:#2589c4;color:#fff}.action-trigger:hover{background:#edf8fd;color:#1f81ba}.action-dots{font-size:18px}.context-menu{position:fixed;display:none;width:245px;padding:7px 0;overflow:hidden;background:rgba(255,255,255,.98);border:1px solid #d8e1e8;border-radius:13px;box-shadow:0 18px 42px rgba(2,18,32,.30);z-index:9999}.context-menu.visible{display:block}.context-header{padding:13px 16px;border-bottom:1px solid #edf0f2;color:#89959f;font-size:10px;font-weight:700;text-transform:uppercase}.context-device-name{display:block;margin-top:7px;color:#183149;font-size:15px;text-transform:none}.context-device-ip{display:block;margin-top:4px;color:#7a8995;font-size:12px;font-weight:400;text-transform:none}.context-item{display:flex;align-items:center;width:100%;min-height:43px;padding:11px 16px;border:0;background:transparent;color:#34495a;font:13px Arial;text-align:left;cursor:pointer}.context-item:hover{background:#f1f7fb;color:#1f7db3}.context-important{color:#2471a3;font-weight:700}.separator{height:1px;margin:4px 0;background:#edf0f2}.error-box{max-width:1180px;margin:0 auto 25px;padding:18px;background:rgba(248,215,218,.96);color:#721c24;border-left:5px solid #dc3545;border-radius:10px}.empty-box{max-width:680px;margin:60px auto;padding:45px 35px;background:rgba(255,255,255,.95);color:#74828e;text-align:center;border-radius:17px}
+.properties-overlay{position:fixed;inset:0;z-index:15000;display:none;align-items:center;justify-content:center;padding:25px;background:rgba(7,24,40,.72);backdrop-filter:blur(8px)}.properties-overlay.visible{display:flex}.properties-modal{position:relative;width:min(760px,100%);max-height:calc(100vh - 50px);overflow:hidden;border:1px solid rgba(255,255,255,.34);border-radius:20px;background:#fff;box-shadow:0 28px 80px rgba(0,0,0,.40)}.properties-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 24px;background:linear-gradient(135deg,#183650,#102a42)}.properties-terminal{display:flex;align-items:center;gap:13px}.properties-terminal-icon{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4db1e7,#2589c4);color:#fff;font-size:19px}.properties-title{color:#fff;font-size:18px;font-weight:700}.properties-device-name{margin-top:3px;color:#bdd4e3;font-size:12px;font-weight:700}.properties-device-address{margin-top:2px;color:#87a8bd;font-size:10px}.properties-close{width:38px;height:38px;border:0;border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-size:24px;cursor:pointer}.properties-body{max-height:calc(100vh - 190px);padding:22px 24px;overflow-y:auto;background:#f5f7f9}.properties-section{margin-bottom:17px;padding:18px;border:1px solid #e2e8ec;border-radius:14px;background:#fff}.properties-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.properties-section h3{margin:3px 0 14px;color:#17334a;font-size:14px}.properties-section-kicker{color:#8a98a3;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.properties-online{padding:5px 9px;border-radius:14px;background:#eef2f4;color:#667684;font-size:9px;font-weight:700}.properties-info-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.property-info-card{padding:12px;border:1px solid #e7ecef;border-radius:10px;background:#f8fafb}.property-info-label{display:block;margin-bottom:6px;color:#8997a2;font-size:8px;font-weight:700;text-transform:uppercase}.property-info-card strong{display:block;overflow:hidden;color:#243d50;font-size:11px;text-overflow:ellipsis;white-space:nowrap}.properties-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.property-action{display:flex;align-items:center;gap:11px;min-height:66px;padding:11px 13px;border:1px solid #e0e7eb;border-radius:11px;background:#fafcfd;text-align:left;cursor:pointer}.property-action-icon{display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex:0 0 auto;border-radius:10px;font-size:16px}.property-action strong{display:block;margin-bottom:4px;color:#284457;font-size:11px}.property-action small{display:block;color:#8795a0;font-size:9px;line-height:1.4}.blue .property-action-icon{background:#e7f4fb;color:#2687bf}.green .property-action-icon{background:#e7f7ed;color:#21884c}.orange .property-action-icon{background:#fff2df;color:#d87b11}.properties-danger-box,.firmware-box{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px;border-radius:11px}.properties-danger-box{border:1px solid #f0d5d7;background:#fff7f7}.firmware-box{border:1px solid #f1dfbd;background:#fffaf0}.properties-danger-box strong,.firmware-box strong{color:#344c5d;font-size:11px}.properties-danger-box p,.firmware-box p{margin-top:5px;color:#7e8d97;font-size:9px;line-height:1.5}.property-danger-button,.firmware-button{flex:0 0 auto;min-height:36px;padding:8px 12px;border-radius:8px;background:#fff;font:700 9px Arial;cursor:pointer}.property-danger-button{border:1px solid #e1a4a8;color:#b33842}.firmware-button{border:1px solid #e5bd76;color:#a9650e}.properties-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 24px;border-top:1px solid #e5eaed;background:#fff;color:#89959f;font-size:9px}.properties-footer-close{min-height:35px;padding:7px 14px;border:1px solid #d8e0e5;border-radius:8px;background:#f4f7f9;color:#435a6b;font:700 10px Arial;cursor:pointer}
+/* Notification flottante professionnelle */
+.property-toast{position:absolute;top:102px;right:22px;z-index:40;display:flex;width:min(390px,calc(100% - 44px));gap:12px;padding:14px 14px 13px;border:1px solid transparent;border-radius:14px;background:#fff;box-shadow:0 18px 42px rgba(16,42,66,.22);opacity:0;visibility:hidden;transform:translateY(-10px) scale(.98);transition:opacity .22s ease,transform .22s ease,visibility .22s}.property-toast.visible{opacity:1;visibility:visible;transform:translateY(0) scale(1)}.property-toast-icon{display:flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 auto;border-radius:11px;font-size:17px;font-weight:800}.property-toast-body{min-width:0;flex:1}.property-toast-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.property-toast-title{margin-top:1px;color:#20384a;font-size:12px;font-weight:800}.property-toast-close{width:25px;height:25px;flex:0 0 auto;border:0;border-radius:7px;background:transparent;color:#82919c;font-size:17px;line-height:1;cursor:pointer}.property-toast-close:hover{background:rgba(0,0,0,.05)}.property-toast-text{margin-top:5px;color:#607481;font-size:10px;line-height:1.5}.property-toast-meta{margin-top:8px;color:#93a0a9;font-size:9px;font-weight:700}.property-toast.success{border-color:#bfe8ce;background:linear-gradient(135deg,#f7fffa,#effaf4)}.property-toast.success .property-toast-icon{background:#daf4e4;color:#1c8b4c}.property-toast.error{border-color:#f0c2c6;background:linear-gradient(135deg,#fffafa,#fff1f2)}.property-toast.error .property-toast-icon{background:#f9dce0;color:#b93a46}.property-toast.info{border-color:#c9e5f5;background:linear-gradient(135deg,#f9fdff,#edf8fd)}.property-toast.info .property-toast-icon{background:#dceff9;color:#267eae}.property-toast.info .property-toast-icon{animation:toastPulse 1.2s ease-in-out infinite}@keyframes toastPulse{50%{transform:scale(.88);opacity:.62}}
+@media(max-width:1200px){.devices-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:820px){.main{padding:26px 22px 45px}.devices-grid{grid-template-columns:1fr}.devices-wrapper{max-width:600px}}@media(max-width:650px){.main{padding:20px 15px 40px}.header{display:block}.btn-primary{width:100%;margin-top:20px}.device-actions{align-items:flex-start;flex-direction:column}.device-buttons{width:100%}.property-trigger,.action-trigger{flex:1}.properties-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.properties-action-grid{grid-template-columns:1fr}.properties-danger-box,.firmware-box{align-items:stretch;flex-direction:column}.property-toast{top:92px;right:12px;width:calc(100% - 24px)}}
+</style>
+</head>
+<body>
+{% include "sidebar.html" %}
+<main class="main"><div class="page-container">
+<div class="header"><div><h1>Pointeuses</h1><p>Gestion des pointeuses ZKTeco configurées</p><div class="header-stats"><span class="header-stat">{{ pointeuses|length }} configurée{% if pointeuses|length > 1 %}s{% endif %}</span><span class="header-stat"><span class="header-stat-dot"></span>{{ pointeuses|selectattr("active")|list|length }} active{% if pointeuses|selectattr("active")|list|length > 1 %}s{% endif %}</span></div></div><button class="btn-primary" type="button" onclick="window.location.href='/pointeuses/ajouter'">+ Ajouter une pointeuse</button></div>
+{% if not resultat.success %}<div class="error-box"><strong>Impossible de charger les pointeuses.</strong><br><br>{{ resultat.erreur }}</div>{% endif %}
+{% if pointeuses %}<div class="devices-wrapper"><div class="devices-grid">
+{% for pointeuse in pointeuses %}<article class="device-card" data-id="{{ pointeuse.id }}" data-nom="{{ pointeuse.nom }}" data-ip="{{ pointeuse.ip }}" data-port="{{ pointeuse.port }}" data-active="{{ 'true' if pointeuse.active else 'false' }}"><div class="device-top"><div class="device-icon"><div class="terminal-symbol"></div></div>{% if pointeuse.active %}<span class="status status-active"><span class="status-dot"></span>ACTIVE</span>{% else %}<span class="status status-inactive"><span class="status-dot"></span>INACTIVE</span>{% endif %}</div><div class="device-identity"><div class="device-name">{{ pointeuse.nom }}</div><div class="device-type">Terminal ZKTeco</div></div><div class="device-info">
+
+    <div>
+        <span class="info-label">Adresse IP</span>
+        <span class="info-value">
+            {{ pointeuse.ip }}
+        </span>
+    </div>
+
+    <div class="port-info">
+        <span class="info-label">Port</span>
+        <span class="info-value">
+            {{ pointeuse.port }}
+        </span>
+    </div>
+
+    <div class="pointages-info">
+        <span class="pointages-label">
+            Pointages actuels
+        </span>
+
+        <span
+            class="pointages-value"
+            id="pointages-{{ pointeuse.id }}"
+        >
+            ...
+        </span>
+    </div>
+
+</div>
+<div class="device-actions"><span class="device-ready">Terminal configuré</span><div class="device-buttons"><button type="button" class="property-trigger" title="Propriétés du terminal">⚙ Propriétés</button><button type="button" class="action-trigger">Actions <span class="action-dots">⋮</span></button></div></div></article>{% endfor %}
+</div></div>{% else %}<div class="empty-box">Aucune pointeuse configurée.</div>{% endif %}
+</div></main>
+<div id="properties-overlay" class="properties-overlay" aria-hidden="true"><section class="properties-modal" role="dialog" aria-modal="true" aria-labelledby="properties-title">
+<div class="properties-header"><div class="properties-terminal"><div class="properties-terminal-icon">⚙</div><div><div class="properties-title" id="properties-title">Propriétés du terminal</div><div class="properties-device-name" id="properties-device-name"></div><div class="properties-device-address" id="properties-device-address"></div></div></div><button type="button" id="properties-close" class="properties-close" aria-label="Fermer">×</button></div>
+<div id="property-toast" class="property-toast" role="status" aria-live="polite" aria-atomic="true"><div id="property-toast-icon" class="property-toast-icon">●</div><div class="property-toast-body"><div class="property-toast-top"><div id="property-toast-title" class="property-toast-title">Information</div><button type="button" id="property-toast-close" class="property-toast-close" aria-label="Fermer la notification">×</button></div><div id="property-toast-text" class="property-toast-text"></div><div id="property-toast-meta" class="property-toast-meta"></div></div></div>
+<div class="properties-body">
+<section class="properties-section"><div class="properties-section-heading"><div><div class="properties-section-kicker">Terminal</div><h3>État et informations</h3></div><span class="properties-online" id="properties-status">Configuré</span></div><div class="properties-info-grid"><div class="property-info-card"><span class="property-info-label">Adresse IP</span><strong id="properties-ip">-</strong></div><div class="property-info-card"><span class="property-info-label">Port</span><strong id="properties-port">-</strong></div><div class="property-info-card"><span class="property-info-label">Firmware</span><strong id="properties-firmware">Non interrogé</strong></div><div class="property-info-card"><span class="property-info-label">Heure terminal</span><strong id="properties-time">Non interrogée</strong></div></div></section>
+<section class="properties-section"><div class="properties-section-kicker">Exploitation</div><h3>Commandes rapides</h3><div class="properties-action-grid"><button type="button" class="property-action blue" id="property-test"><span class="property-action-icon">◉</span><span><strong>Tester la connexion</strong><small>Vérifier la communication avec le terminal</small></span></button><button type="button" class="property-action green" id="property-sync-time"><span class="property-action-icon">◷</span><span><strong>Synchroniser l'heure</strong><small>Copier l'heure du serveur vers le terminal</small></span></button><button type="button" class="property-action blue" id="property-refresh"><span class="property-action-icon">↻</span><span><strong>Actualiser</strong><small>Relire l'état du terminal</small></span></button><button type="button" class="property-action orange" id="property-restart"><span class="property-action-icon">↻</span><span><strong>Redémarrer</strong><small>Redémarrer proprement le terminal</small></span></button></div></section>
+<section class="properties-section"><div class="properties-section-kicker">Administration</div><h3>Privilèges utilisateurs</h3><div class="properties-danger-box"><div><strong>Retirer les privilèges Admin</strong><p>Action sensible. Une confirmation sera requise avant toute exécution.</p></div><button type="button" class="property-danger-button" id="property-clear-admin">Retirer Admin</button></div></section>
+<section class="properties-section"><div class="properties-section-kicker">Maintenance avancée</div><h3>Firmware</h3><div class="firmware-box"><div><strong>Mise à jour du firmware</strong><p>N'utiliser qu'un firmware officiellement compatible avec le modèle exact.</p></div><button type="button" class="firmware-button" id="property-firmware">Mise à jour</button></div></section>
+</div><div class="properties-footer"><span>Aucune suppression automatique des pointages.</span><button type="button" class="properties-footer-close" id="properties-footer-close">Fermer</button></div></section></div>
+<div id="context-menu" class="context-menu">
+    <div class="context-header">
+        Pointeuse sélectionnée
+        <span id="context-name" class="context-device-name"></span>
+        <span id="context-ip" class="context-device-ip"></span>
+    </div>
+
+    <button id="context-employes" class="context-item context-important" type="button">
+        Voir les employés
+    </button>
+
+    <div class="separator"></div>
+
+    <button id="context-modifier" class="context-item" type="button">
+        Modifier
+    </button>
+
+    <div class="separator"></div>
+
+    <button id="context-import" class="context-item context-important" type="button">
+        Import Excel
+    </button>
+
+    <div class="separator"></div>
+
+    <button
+        id="context-supprimer"
+        class="context-item"
+        type="button"
+        style="color:#dc3545;font-weight:700;"
+    >
+        🗑 Supprimer
+    </button>
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+const menu=document.getElementById('context-menu'),
+contextName=document.getElementById('context-name'),
+contextIp=document.getElementById('context-ip'),
+employeesButton=document.getElementById('context-employes'),
+modifierButton=document.getElementById('context-modifier'),
+importButton=document.getElementById('context-import'),
+supprimerButton=document.getElementById('context-supprimer'),
+cards=document.querySelectorAll('.device-card');
+
+const overlay=document.getElementById('properties-overlay'),close=document.getElementById('properties-close'),footerClose=document.getElementById('properties-footer-close'),pName=document.getElementById('properties-device-name'),pAddress=document.getElementById('properties-device-address'),pIp=document.getElementById('properties-ip'),pPort=document.getElementById('properties-port'),pFirmware=document.getElementById('properties-firmware'),pTime=document.getElementById('properties-time'),pStatus=document.getElementById('properties-status');
+const toast=document.getElementById('property-toast'),toastIcon=document.getElementById('property-toast-icon'),toastTitle=document.getElementById('property-toast-title'),toastText=document.getElementById('property-toast-text'),toastMeta=document.getElementById('property-toast-meta'),toastClose=document.getElementById('property-toast-close');
+let selected=null,toastTimer=null;
+function selectCard(card){selected={id:card.dataset.id,nom:card.dataset.nom,ip:card.dataset.ip,port:card.dataset.port,active:card.dataset.active==='true'};cards.forEach(function(c){c.classList.remove('selected');});card.classList.add('selected');contextName.textContent=selected.nom;contextIp.textContent=selected.ip+':'+selected.port;}
+function closeMenu(){menu.classList.remove('visible');}
+function openMenu(x,y){menu.classList.add('visible');const r=menu.getBoundingClientRect();x=Math.max(10,Math.min(x,window.innerWidth-r.width-10));y=Math.max(10,Math.min(y,window.innerHeight-r.height-10));menu.style.left=x+'px';menu.style.top=y+'px';}
+function heureCourte(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+function clearPropertyMessage(){if(toastTimer){clearTimeout(toastTimer);toastTimer=null;}toast.className='property-toast';toast.setAttribute('aria-hidden','true');toastText.textContent='';toastMeta.textContent='';}
+function propertyMessage(type,text,options){options=options||{};if(toastTimer){clearTimeout(toastTimer);toastTimer=null;}const cfg={success:{title:'Opération réussie',icon:'✓'},error:{title:"Échec de l'opération",icon:'!'},info:{title:'Opération en cours',icon:'◌'}}[type]||{title:'Information',icon:'i'};toast.className='property-toast '+type+' visible';toast.setAttribute('aria-hidden','false');toastIcon.textContent=cfg.icon;toastTitle.textContent=options.title||cfg.title;toastText.textContent=text||'';toastMeta.textContent=(selected&&selected.nom?selected.nom:'Pointeuse')+' · '+heureCourte();if(type!=='info'&&!options.persistent){toastTimer=setTimeout(clearPropertyMessage,5000);}}
+function openProperties(card){
+
+    closeMenu();
+
+    selectCard(card);
+
+    pName.textContent =
+        selected.nom;
+
+    pAddress.textContent =
+        selected.ip +
+        ':' +
+        selected.port;
+
+    pIp.textContent =
+        selected.ip;
+
+    pPort.textContent =
+        selected.port;
+
+    pFirmware.textContent =
+        'Chargement...';
+
+    pTime.textContent =
+        'Chargement...';
+
+    pStatus.textContent =
+        selected.active
+        ? '● ACTIVE'
+        : '● INACTIVE';
+
+    clearPropertyMessage();
+
+    overlay.classList.add(
+        'visible'
+    );
+
+    overlay.setAttribute(
+        'aria-hidden',
+        'false'
+    );
+
+    document.body.style.overflow =
+        'hidden';
+
+    chargerProprietes({
+        silent:true
+    }).catch(function(){});
+setInterval(function(){
+
+    if(
+        overlay.classList.contains(
+            'visible'
+        )
+    ){
+
+        chargerProprietes({
+            silent:true
+        }).catch(function(){});
+
+    }
+
+},10000);
+}
+function closeProperties(){clearPropertyMessage();overlay.classList.remove('visible');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';cards.forEach(function(c){c.classList.remove('selected');});}
+cards.forEach(function(card){card.addEventListener('contextmenu',function(e){e.preventDefault();closeMenu();selectCard(card);openMenu(e.clientX,e.clientY);});const action=card.querySelector('.action-trigger');if(action){action.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();const r=action.getBoundingClientRect();closeMenu();selectCard(card);openMenu(r.right-245,r.bottom+8);});}const property=card.querySelector('.property-trigger');if(property){property.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openProperties(card);});}});
+if(employeesButton)employeesButton.addEventListener('click',function(){if(selected)window.location.href='/employes?pointeuse_id='+encodeURIComponent(selected.id);});if(modifierButton)modifierButton.addEventListener('click',function(){if(selected)window.location.href='/pointeuses/'+encodeURIComponent(selected.id)+'/modifier';});if(supprimerButton)
+    supprimerButton.addEventListener('click',async function(){
+
+        if(!selected) return;
+
+        if(!confirm(
+            'Voulez-vous vraiment supprimer la pointeuse "' +
+            selected.nom +
+            '" ?'
+        )){
+            return;
+        }
+
+        try{
+
+            const response = await fetch(
+                '/api/pointeuses/' +
+                encodeURIComponent(selected.id) +
+                '/supprimer',
+                {
+                    method:'POST'
+                }
+            );
+
+            const data = await response.json();
+
+            if(data.success){
+                alert('Pointeuse supprimée avec succès');
+                location.reload();
+            }else{
+                alert(data.erreur || 'Erreur de suppression');
+            }
+
+        }catch(error){
+            alert('Erreur de communication avec le serveur');
+        }
+
+    });
+if(close)close.addEventListener('click',closeProperties);if(footerClose)footerClose.addEventListener('click',closeProperties);if(toastClose)toastClose.addEventListener('click',clearPropertyMessage);if(overlay)overlay.addEventListener('click',function(e){if(e.target===overlay)closeProperties();});document.addEventListener('click',function(e){if(menu&&!menu.contains(e.target))closeMenu();});document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenu();closeProperties();}});window.addEventListener('scroll',closeMenu);window.addEventListener('resize',closeMenu);
+async function readJson(r){try{return await r.json();}catch(e){throw new Error('Le serveur a retourné une réponse invalide.');}}
+async function chargerProprietes(options){options=options||{};if(!selected)return;if(!options.silent)propertyMessage('info','Lecture des informations du terminal...',{title:'Connexion au terminal'});try{const r=await fetch('/api/pointeuses/'+encodeURIComponent(selected.id)+'/proprietes',{cache:'no-store'});const d=await readJson(r);if(!r.ok||d.success!==true)throw new Error(d.erreur||'Lecture impossible.');pFirmware.textContent=d.firmware||'Non disponible';pTime.textContent=d.heure||'Non disponible';pStatus.textContent='● CONNECTÉE';if(!options.silent)propertyMessage('success','Terminal connecté. '+String(d.nombre_utilisateurs||0)+' utilisateur(s), '+String(d.nombre_admins||0)+' administrateur(s).',{title:'Connexion réussie'});return d;}catch(err){pStatus.textContent='● HORS LIGNE';if(!options.silent)propertyMessage('error',err.message||'Erreur de connexion.');throw err;}}
+document.getElementById('property-test').addEventListener('click',function(){chargerProprietes().catch(function(){});});
+document.getElementById('property-refresh').addEventListener('click',function(){chargerProprietes().catch(function(){});});
+document.getElementById('property-sync-time').addEventListener('click',async function(){if(!selected)return;propertyMessage('info',"Synchronisation de l'heure du terminal...",{title:'Synchronisation en cours'});try{const r=await fetch('/api/pointeuses/'+encodeURIComponent(selected.id)+'/synchroniser-heure',{method:'POST'});const d=await readJson(r);if(!r.ok||d.success!==true)throw new Error(d.erreur||'Synchronisation impossible.');pTime.textContent=d.heure_apres||'Synchronisée';propertyMessage('success',d.message||"L'heure de la pointeuse a été synchronisée avec succès.",{title:'Heure synchronisée'});}catch(err){propertyMessage('error',err.message||'Erreur de synchronisation.',{title:'Synchronisation impossible'});}});
+document.getElementById('property-restart').addEventListener('click',async function(){if(!selected)return;if(!window.confirm('Redémarrer la pointeuse '+selected.nom+' ?\n\nLe terminal sera indisponible pendant quelques instants.'))return;propertyMessage('info','Envoi de la commande de redémarrage au terminal...',{title:'Redémarrage en cours'});try{const r=await fetch('/api/pointeuses/'+encodeURIComponent(selected.id)+'/redemarrer',{method:'POST'});const d=await readJson(r);if(!r.ok||d.success!==true)throw new Error(d.erreur||'Redémarrage impossible.');pStatus.textContent='● REDÉMARRAGE';propertyMessage('success',d.message||'La commande de redémarrage a été envoyée au terminal.',{title:'Commande envoyée'});}catch(err){propertyMessage('error',err.message||'Erreur de redémarrage.',{title:'Redémarrage impossible'});}});
+document.getElementById('property-clear-admin').addEventListener('click',async function(){if(!selected)return;if(!window.confirm('ATTENTION\n\nRetirer les privilèges Admin de tous les administrateurs de '+selected.nom+' ?\n\nLes utilisateurs seront conservés. Seul leur privilège sera modifié.'))return;propertyMessage('info','Modification des privilèges administrateur...',{title:'Modification en cours'});try{const r=await fetch('/api/pointeuses/'+encodeURIComponent(selected.id)+'/retirer-admin',{method:'POST'});const d=await readJson(r);if(!r.ok||d.success!==true)throw new Error(d.erreur||'Impossible de retirer les privilèges Admin.');try{await chargerProprietes({silent:true});}catch(e){}propertyMessage('success',d.message||String(d.nombre_modifies||0)+' privilège(s) Admin retiré(s).',{title:'Privilèges mis à jour'});}catch(err){propertyMessage('error',err.message||'Erreur de modification des privilèges.',{title:'Modification impossible'});}});
+document.getElementById('property-firmware').addEventListener('click',function(){propertyMessage('info','La mise à jour firmware reste verrouillée. Le modèle exact du terminal et un firmware officiel compatible doivent être validés avant activation.',{title:'Mise à jour verrouillée',persistent:true});});
+async function chargerNombrePointages() {
+
+    const cartes =
+        document.querySelectorAll('.device-card');
+
+    for (const carte of cartes) {
+
+        const id =
+            carte.dataset.id;
+
+        const compteur =
+            document.getElementById(
+                'pointages-' + id
+            );
+
+        if (!compteur)
+            continue;
+
+        try {
+
+            const response =
+                await fetch(
+                    '/api/pointeuses/' +
+                    encodeURIComponent(id) +
+                    '/nombre-pointages'
+                );
+
+            const data =
+                await response.json();
+
+            if (
+                data.success &&
+                typeof data.nombre !== 'undefined'
+            ) {
+
+                compteur.textContent =
+                    Number(
+                        data.nombre
+                    ).toLocaleString(
+                        'fr-FR'
+                    );
+
+            } else {
+
+                compteur.textContent =
+                    '-';
+
+            }
+
+        } catch (e) {
+
+            compteur.textContent =
+                'Erreur';
+
+        }
+
+    }
+
+}
+
+chargerNombrePointages();
+
+setInterval(
+    chargerNombrePointages,
+    60000
+);
+});
+</script>
+</body>
+</html>

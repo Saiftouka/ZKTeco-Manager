@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZKTeco Manager - Gestion des profils</title>
+    <link rel="stylesheet" href="/static/css/navigation.css?v=20261001-02">
+
+    <style>
+        * { box-sizing: border-box; }
+        html, body { min-height: 100%; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #243d50;
+            background: #10263f url('/static/images/Versigent-Desktop-B-3840x2160.png') center/cover fixed no-repeat;
+        }
+        .main { min-height: 100vh; padding: 30px 38px 60px; }
+        .page { width: 100%; max-width: 1280px; margin: 0 auto; }
+        .hero {
+            position: relative; overflow: hidden; padding: 25px 28px;
+            border: 1px solid rgba(255,255,255,.06); border-radius: 18px;
+            background: rgba(21,50,77,.95); color: #fff;
+            box-shadow: 0 16px 38px rgba(0,0,0,.22);
+        }
+        .hero::before {
+            content: ""; position: absolute; top: 0; left: 34px; right: 34px; height: 4px;
+            background: linear-gradient(90deg,#f28c18,#ffb34c);
+        }
+        .hero-content { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+        .hero-kicker { color: #99bdd5; font-size: 9px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; }
+        .hero h1 { margin: 6px 0 8px; font-size: 27px; }
+        .hero p { max-width: 760px; margin: 0; color: #bfd0dc; font-size: 11px; line-height: 1.7; }
+        .new-profile-button {
+            min-height: 43px; padding: 10px 17px; border: 0; border-radius: 9px;
+            background: linear-gradient(135deg,#349dde,#237fb8); color: #fff;
+            font: 700 11px Arial; white-space: nowrap; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(35,127,184,.27);
+        }
+        .new-profile-button:hover { transform: translateY(-1px); }
+        .stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin: 20px 0; }
+        .stat { padding: 18px; border-radius: 14px; background: rgba(255,255,255,.97); box-shadow: 0 10px 26px rgba(3,20,36,.17); }
+        .stat-label { color: #8494a0; font-size: 8px; font-weight: 800; letter-spacing: .9px; text-transform: uppercase; }
+        .stat-value { display: block; margin-top: 7px; color: #18354c; font-size: 25px; font-weight: 800; }
+        .stat-active .stat-value { color: #218852; }
+        .stat-admin .stat-value { color: #d77a13; }
+        .sheet { overflow: hidden; border-radius: 17px; background: rgba(255,255,255,.98); box-shadow: 0 16px 38px rgba(3,20,36,.22); }
+        .sheet-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 17px 19px; border-bottom: 1px solid #e6ecef; }
+        .sheet-title { color: #18354c; font-size: 14px; font-weight: 800; }
+        .search { width: min(410px,100%); height: 41px; padding: 0 13px; border: 1px solid #d4dfe6; border-radius: 9px; background: #fff; color: #294357; font: 11px Arial; outline: none; }
+        .search:focus { border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,.10); }
+        .table-wrap { overflow: auto; max-height: 600px; }
+        table { width: 100%; min-width: 900px; border-collapse: collapse; }
+        thead { position: sticky; top: 0; z-index: 2; }
+        th { padding: 13px 15px; background: #203d59; color: #fff; font-size: 9px; letter-spacing: .7px; text-align: left; text-transform: uppercase; }
+        td { padding: 13px 15px; border-bottom: 1px solid #e9eef1; color: #384f60; font-size: 11px; vertical-align: middle; }
+        tbody tr:nth-child(even) { background: #f8fafb; }
+        tbody tr:hover { background: #f1f7fa; }
+        .profile-name { color: #183a54; font-weight: 800; }
+        .username { color: #648092; font-family: Consolas,monospace; font-size: 10px; }
+        .badge { display: inline-flex; align-items: center; min-height: 22px; padding: 4px 8px; border-radius: 12px; font-size: 7px; font-weight: 900; letter-spacing: .55px; }
+        .role-admin { background: #fff0dc; color: #b66708; }
+        .role-user { background: #e7f5fd; color: #257aa8; }
+        .status-active { background: #e4f7eb; color: #27814f; }
+        .status-inactive { background: #f3f5f6; color: #7b8993; }
+        .actions { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+        .action-button { min-height: 31px; padding: 6px 9px; border-radius: 7px; font: 700 8px Arial; cursor: pointer; }
+        .edit-button { border: 1px solid #c4ddeb; background: #eff8fd; color: #287aa7; }
+        .password-button { border: 1px solid #dfd2b7; background: #fff9ed; color: #9b6a20; }
+        .toggle-button { border: 1px solid #d8dee2; background: #f6f8f9; color: #657681; }
+        .toggle-button.danger { border-color: #ecc8cc; background: #fff4f4; color: #aa3f48; }
+        .empty { padding: 55px 24px; text-align: center; color: #7a8d99; }
+        .empty strong { display: block; margin-bottom: 7px; color: #345066; font-size: 14px; }
+        .empty span { font-size: 10px; line-height: 1.6; }
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 20000; display: none; align-items: center; justify-content: center;
+            padding: 22px; background: rgba(6,22,37,.73); backdrop-filter: blur(7px);
+        }
+        .modal-overlay.visible { display: flex; }
+        .modal { width: min(540px,100%); overflow: hidden; border-radius: 18px; background: #fff; box-shadow: 0 28px 80px rgba(0,0,0,.40); }
+        .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 20px 22px; background: linear-gradient(135deg,#193b56,#102c44); color: #fff; }
+        .modal-title { font-size: 16px; font-weight: 800; }
+        .modal-subtitle { margin-top: 4px; color: #b8cfdd; font-size: 9px; }
+        .modal-close { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 9px; background: rgba(255,255,255,.08); color: #fff; font-size: 21px; cursor: pointer; }
+        .modal-body { padding: 21px 22px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .field { margin-top: 13px; }
+        .field.full { grid-column: 1/-1; }
+        .field label { display: block; margin-bottom: 6px; color: #667b8b; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+        .field input,.field select { width: 100%; height: 42px; padding: 0 11px; border: 1px solid #ccd9e1; border-radius: 9px; background: #fff; color: #294357; font: 11px Arial; outline: none; }
+        .field input:focus,.field select:focus { border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,.10); }
+        .check-line { display: flex; align-items: center; gap: 8px; margin-top: 17px; color: #526b7c; font-size: 10px; }
+        .check-line input { width: 16px; height: 16px; accent-color: #3196d2; }
+        .modal-note { margin-top: 16px; padding: 10px 12px; border-left: 3px solid #3498db; border-radius: 7px; background: #edf8fd; color: #467085; font-size: 9px; line-height: 1.5; }
+        .modal-message { display: none; margin-top: 13px; padding: 10px 12px; border-radius: 8px; font-size: 9px; font-weight: 700; }
+        .modal-message.error { display: block; border-left: 3px solid #dc3545; background: #fff1f2; color: #99353d; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 22px; border-top: 1px solid #e7ecef; }
+        .modal-cancel,.modal-save { min-height: 38px; padding: 8px 14px; border-radius: 8px; font: 700 10px Arial; cursor: pointer; }
+        .modal-cancel { border: 1px solid #d6dfe5; background: #f6f8f9; color: #526878; }
+        .modal-save { border: 0; background: linear-gradient(135deg,#349dde,#267fb5); color: #fff; }
+        .modal-save:disabled { opacity: .55; cursor: default; }
+        .toast { position: fixed; top: 25px; right: 25px; z-index: 25000; width: min(390px,calc(100% - 40px)); padding: 14px; border: 1px solid transparent; border-radius: 13px; opacity: 0; visibility: hidden; transform: translateY(-10px); box-shadow: 0 18px 40px rgba(5,25,42,.25); transition: .22s ease; }
+        .toast.visible { opacity: 1; visibility: visible; transform: none; }
+        .toast.success { border-color: #bde5ca; background: #f0faf4; color: #28724b; }
+        .toast.error { border-color: #efc5c9; background: #fff2f3; color: #963942; }
+        .toast strong { display: block; font-size: 11px; }
+        .toast p { margin: 4px 0 0; font-size: 9px; line-height: 1.45; }
+        @media (max-width: 900px) {
+            .hero-content { align-items: stretch; flex-direction: column; }
+            .new-profile-button { width: 100%; }
+            .stats { grid-template-columns: 1fr; }
+            .sheet-toolbar { align-items: stretch; flex-direction: column; }
+            .search { width: 100%; }
+        }
+        @media (max-width: 600px) {
+            .main { padding: 18px 12px 35px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .field.full { grid-column: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    {% include "sidebar.html" %}
+
+    <main class="main">
+        <div class="page">
+            <section class="hero">
+                <div class="hero-content">
+                    <div>
+                        <div class="hero-kicker">Administration</div>
+                        <h1>Gestion des profils</h1>
+                        <p>Créez et administrez les comptes ayant accès à ZKTeco Manager. Chaque profil dispose de son propre espace de pointeuses et de données.</p>
+                    </div>
+                    <button id="new-profile-button" type="button" class="new-profile-button">+ Nouveau profil</button>
+                </div>
+            </section>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Profils configurés</div>
+                    <strong class="stat-value">{{ statistiques.nombre_profils | default(profils | length) }}</strong>
+                </div>
+                <div class="stat stat-active">
+                    <div class="stat-label">Profils actifs</div>
+                    <strong class="stat-value">{{ statistiques.nombre_actifs | default(0) }}</strong>
+                </div>
+                <div class="stat stat-admin">
+                    <div class="stat-label">Administrateurs</div>
+                    <strong class="stat-value">{{ statistiques.nombre_admins | default(0) }}</strong>
+                </div>
+            </div>
+
+            <section class="sheet">
+                <div class="sheet-toolbar">
+                    <div class="sheet-title">Profils utilisateurs</div>
+                    <input id="profile-search" class="search" type="search" placeholder="Rechercher un nom, utilisateur ou rôle...">
+                </div>
+
+                {% if profils %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>DEPARTEMENT</th><th>Utilisateur</th><th>Rôle</th><th>État</th><th>Dernière connexion</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for profil in profils %}
+                            <tr class="profile-row" data-search="{{ profil.nom }} {{ profil.username }} {{ profil.role }}">
+                                <td class="profile-name">{{ profil.nom or profil.username }}</td>
+                                <td class="username">{{ profil.username }}</td>
+                                <td>
+                                    {% if profil.role == "ADMIN" %}<span class="badge role-admin">ADMIN</span>{% else %}<span class="badge role-user">USER</span>{% endif %}
+                                </td>
+                                <td>
+                                    {% if profil.active %}<span class="badge status-active">ACTIF</span>{% else %}<span class="badge status-inactive">INACTIF</span>{% endif %}
+                                </td>
+                                <td>{{ profil.derniere_connexion_affichage or "Jamais" }}</td>
+                                <td>
+                                    <div class="actions">
+                                        <button type="button" class="action-button edit-button" data-edit-profile data-id="{{ profil.id }}" data-name="{{ profil.nom }}" data-username="{{ profil.username }}" data-role="{{ profil.role }}" data-active="{{ 'true' if profil.active else 'false' }}">Modifier</button>
+                                        <button type="button" class="action-button password-button" data-password-profile data-id="{{ profil.id }}" data-name="{{ profil.nom or profil.username }}" data-username="{{ profil.username }}">Mot de passe</button>
+                                        {% if profil.id != profil_connecte.id %}
+                                        <button type="button" class="action-button toggle-button {% if profil.active %}danger{% endif %}" data-toggle-profile data-id="{{ profil.id }}" data-name="{{ profil.nom or profil.username }}" data-active="{{ 'true' if profil.active else 'false' }}">{% if profil.active %}Désactiver{% else %}Activer{% endif %}</button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty"><strong>Aucun profil configuré</strong><span>Utilisez « Nouveau profil » pour créer le premier compte utilisateur.</span></div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <div id="profile-modal" class="modal-overlay" aria-hidden="true">
+        <section class="modal">
+            <div class="modal-head">
+                <div><div id="profile-modal-title" class="modal-title">Nouveau profil</div><div class="modal-subtitle">Compte d'accès à ZKTeco Manager</div></div>
+                <button id="profile-modal-close" type="button" class="modal-close" aria-label="Fermer">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="field full"><label for="profile-name">Nom</label><input id="profile-name" type="text" maxlength="100" autocomplete="off" placeholder="Ex. Utilisateur Bureau"></div>
+                    <div class="field full"><label for="profile-username">Nom d'utilisateur</label><input id="profile-username" type="text" maxlength="50" autocomplete="off" placeholder="Ex. bureau"></div>
+                    <div id="password-fields" class="field full"><label for="profile-password">Mot de passe</label><input id="profile-password" type="password" autocomplete="new-password"></div>
+                    <div id="password-confirm-fields" class="field full"><label for="profile-password-confirm">Confirmation du mot de passe</label><input id="profile-password-confirm" type="password" autocomplete="new-password"></div>
+                    <div class="field"><label for="profile-role">Rôle</label><select id="profile-role"><option value="USER">USER</option><option value="ADMIN">ADMIN</option></select></div>
+                    <div class="field"><label>État</label><div class="check-line"><input id="profile-active" type="checkbox" checked><span>Profil actif</span></div></div>
+                </div>
+                <div class="modal-note">Un nouveau profil USER démarre sans pointeuse. Les pointeuses ajoutées depuis ce compte seront automatiquement associées à ce profil.</div>
+                <div id="profile-modal-message" class="modal-message"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="profile-modal-cancel" type="button" class="modal-cancel">Annuler</button>
+                <button id="profile-modal-save" type="button" class="modal-save">Enregistrer</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="password-modal" class="modal-overlay" aria-hidden="true">
+        <section class="modal">
+            <div class="modal-head">
+                <div><div class="modal-title">Réinitialiser le mot de passe</div><div id="password-profile-name" class="modal-subtitle"></div></div>
+                <button id="password-modal-close" type="button" class="modal-close" aria-label="Fermer">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="field"><label for="new-password">Nouveau mot de passe</label><input id="new-password" type="password" autocomplete="new-password"></div>
+                <div class="field"><label for="new-password-confirm">Confirmation</label><input id="new-password-confirm" type="password" autocomplete="new-password"></div>
+                <div class="modal-note">Utilisez un mot de passe fort comprenant des lettres majuscules, minuscules et des chiffres.</div>
+                <div id="password-modal-message" class="modal-message"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="password-modal-cancel" type="button" class="modal-cancel">Annuler</button>
+                <button id="password-modal-save" type="button" class="modal-save">Modifier le mot de passe</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast"><strong id="toast-title"></strong><p id="toast-text"></p></div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const byId = (id) => document.getElementById(id);
+        const search = byId("profile-search");
+        if (search) {
+            search.addEventListener("input", function () {
+                const q = search.value.trim().toLowerCase();
+                document.querySelectorAll(".profile-row").forEach(function (row) {
+                    row.style.display = !q || (row.dataset.search || "").toLowerCase().includes(q) ? "" : "none";
+                });
+            });
+        }
+
+        const profileModal = byId("profile-modal");
+        const profileTitle = byId("profile-modal-title");
+        const profileName = byId("profile-name");
+        const profileUsername = byId("profile-username");
+        const profilePassword = byId("profile-password");
+        const profilePasswordConfirm = byId("profile-password-confirm");
+        const profileRole = byId("profile-role");
+        const profileActive = byId("profile-active");
+        const passwordFields = byId("password-fields");
+        const passwordConfirmFields = byId("password-confirm-fields");
+        const profileMessage = byId("profile-modal-message");
+        const profileSave = byId("profile-modal-save");
+        let editProfileId = null;
+
+        function openOverlay(el) { el.classList.add("visible"); el.setAttribute("aria-hidden", "false"); document.body.style.overflow = "hidden"; }
+        function closeOverlay(el) { el.classList.remove("visible"); el.setAttribute("aria-hidden", "true"); document.body.style.overflow = ""; }
+        function clearMessage(el) { el.className = "modal-message"; el.textContent = ""; }
+        function setError(el, text) { el.className = "modal-message error"; el.textContent = text; }
+
+        function showToast(type, title, text) {
+            const toast = byId("toast");
+            byId("toast-title").textContent = title;
+            byId("toast-text").textContent = text;
+            toast.className = "toast " + type + " visible";
+            setTimeout(() => toast.classList.remove("visible"), 3500);
+        }
+
+        async function readJson(response) {
+            const text = await response.text();
+            let data;
+            try { data = JSON.parse(text); } catch (_) { throw new Error("Réponse serveur invalide (HTTP " + response.status + ")."); }
+            if (!response.ok || data.success !== true) throw new Error(data.erreur || "Opération impossible.");
+            return data;
+        }
+
+        function openNewProfile() {
+            editProfileId = null;
+            profileTitle.textContent = "Nouveau profil";
+            profileName.value = "";
+            profileUsername.value = "";
+            profileUsername.disabled = false;
+            profilePassword.value = "";
+            profilePasswordConfirm.value = "";
+            profileRole.value = "USER";
+            profileActive.checked = true;
+            passwordFields.style.display = "";
+            passwordConfirmFields.style.display = "";
+            clearMessage(profileMessage);
+            openOverlay(profileModal);
+            profileName.focus();
+        }
+
+        const newButton = byId("new-profile-button");
+        if (newButton) newButton.addEventListener("click", openNewProfile);
+
+        document.querySelectorAll("[data-edit-profile]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                editProfileId = button.dataset.id;
+                profileTitle.textContent = "Modifier le profil";
+                profileName.value = button.dataset.name || "";
+                profileUsername.value = button.dataset.username || "";
+                profileUsername.disabled = true;
+                profileRole.value = button.dataset.role || "USER";
+                profileActive.checked = button.dataset.active === "true";
+                passwordFields.style.display = "none";
+                passwordConfirmFields.style.display = "none";
+                clearMessage(profileMessage);
+                openOverlay(profileModal);
+            });
+        });
+
+        profileSave.addEventListener("click", async function () {
+            const nom = profileName.value.trim();
+            const username = profileUsername.value.trim();
+            const role = profileRole.value;
+            if (!nom) return setError(profileMessage, "Le nom est obligatoire.");
+            if (!username) return setError(profileMessage, "Le nom d'utilisateur est obligatoire.");
+
+            const body = new URLSearchParams();
+            body.set("nom", nom); body.set("username", username); body.set("role", role); body.set("active", profileActive.checked ? "true" : "false");
+            let url;
+            if (editProfileId) {
+                url = "/administration/profils/" + encodeURIComponent(editProfileId) + "/modifier";
+            } else {
+                if (!profilePassword.value || profilePassword.value !== profilePasswordConfirm.value) return setError(profileMessage, "Les mots de passe sont obligatoires et doivent correspondre.");
+                body.set("password", profilePassword.value);
+                url = "/administration/profils/creer";
+            }
+
+            profileSave.disabled = true;
+            try {
+                const data = await readJson(await fetch(url, {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"}, body:body.toString()}));
+                closeOverlay(profileModal);
+                showToast("success", editProfileId ? "Profil modifié" : "Profil créé", data.message || "Opération terminée.");
+                setTimeout(() => window.location.reload(), 450);
+            } catch (e) { setError(profileMessage, e.message); }
+            finally { profileSave.disabled = false; }
+        });
+
+        byId("profile-modal-close").addEventListener("click", () => closeOverlay(profileModal));
+        byId("profile-modal-cancel").addEventListener("click", () => closeOverlay(profileModal));
+        profileModal.addEventListener("click", (e) => { if (e.target === profileModal) closeOverlay(profileModal); });
+
+        const passwordModal = byId("password-modal");
+        const newPassword = byId("new-password");
+        const newPasswordConfirm = byId("new-password-confirm");
+        const passwordMessage = byId("password-modal-message");
+        const passwordSave = byId("password-modal-save");
+        let passwordProfileId = null;
+
+        document.querySelectorAll("[data-password-profile]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                passwordProfileId = button.dataset.id;
+                byId("password-profile-name").textContent = button.dataset.name || button.dataset.username || "";
+                newPassword.value = ""; newPasswordConfirm.value = ""; clearMessage(passwordMessage); openOverlay(passwordModal); newPassword.focus();
+            });
+        });
+
+        passwordSave.addEventListener("click", async function () {
+            if (!passwordProfileId) return;
+            if (!newPassword.value || newPassword.value !== newPasswordConfirm.value) return setError(passwordMessage, "Les mots de passe doivent correspondre.");
+            const body = new URLSearchParams(); body.set("password", newPassword.value);
+            passwordSave.disabled = true;
+            try {
+                const data = await readJson(await fetch("/administration/profils/" + encodeURIComponent(passwordProfileId) + "/mot-de-passe", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"}, body:body.toString()}));
+                closeOverlay(passwordModal); showToast("success", "Mot de passe modifié", data.message || "Mot de passe mis à jour.");
+            } catch (e) { setError(passwordMessage, e.message); }
+            finally { passwordSave.disabled = false; }
+        });
+
+        byId("password-modal-close").addEventListener("click", () => closeOverlay(passwordModal));
+        byId("password-modal-cancel").addEventListener("click", () => closeOverlay(passwordModal));
+        passwordModal.addEventListener("click", (e) => { if (e.target === passwordModal) closeOverlay(passwordModal); });
+
+        document.querySelectorAll("[data-toggle-profile]").forEach(function (button) {
+            button.addEventListener("click", async function () {
+                const id = button.dataset.id;
+                const active = button.dataset.active === "true";
+                const nom = button.dataset.name || "ce profil";
+                if (!window.confirm((active ? "Désactiver " : "Activer ") + nom + " ?")) return;
+                const body = new URLSearchParams(); body.set("active", active ? "false" : "true");
+                try {
+                    const data = await readJson(await fetch("/administration/profils/" + encodeURIComponent(id) + "/etat", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"}, body:body.toString()}));
+                    showToast("success", "Profil mis à jour", data.message || "État du profil modifié.");
+                    setTimeout(() => window.location.reload(), 450);
+                } catch (e) { showToast("error", "Opération impossible", e.message); }
+            });
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key !== "Escape") return;
+            if (profileModal.classList.contains("visible")) closeOverlay(profileModal);
+            if (passwordModal.classList.contains("visible")) closeOverlay(passwordModal);
+        });
+    });
+    </script>
+</body>
+</html>
